@@ -1,0 +1,20 @@
+{
+  "name": "QA-Group-Project-1",
+  "workspaces": [
+    "apps/*"
+  ],
+  "version": "1.0.0",
+  "description": "Monorepo for the first group project",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend start",
+    "dev": "concurrently --names 'frontend,backend' --prefix-colors 'blue,green' \"pnpm --filter frontend dev\" \"pnpm --filter backend start\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
