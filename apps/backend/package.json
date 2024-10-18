@@ -1,5 +1,5 @@
 {
-  "name": "QA-Group-Project-1",
+  "name": "backend",
   "workspaces": [
     "apps/*"
   ],
