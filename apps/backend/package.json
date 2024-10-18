@@ -1,12 +1,37 @@
 {
   "name": "backend",
+  "workspaces": [
+    "apps/*"
+  ],
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Monorepo for the first group project",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend start",
+    "dev": "concurrently --names 'frontend,backend' --prefix-colors 'blue,green' \"pnpm --filter frontend dev\" \"pnpm --filter backend start\""
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.7.4",
+    "express-validator": "7.2.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.2"
+
+  },
+  "dependencies": {
+    "@xata.io/client": "^0.30.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express":"^4.21.0",
+    "ts-node":"^10.9.2"
+  }
+
+  
 }
