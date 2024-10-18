@@ -306,8 +306,8 @@ packages:
     resolution: {integrity: sha512-S1Ak9WS2o8mq4f2jHPd2EU9XCCqEw//wh2+SlTAyKOPBvpZDe5c2ROMA0q/9chThfevXg0g58HuOurkoVlsEqQ==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/table@0.1.19':
-    resolution: {integrity: sha512-a659MZzfWcRa0IvrxJWkEhh3bU3JV1QQzExrj98A4SLZJ1NVuWsnkyMFc9IZ8iQsz1j3sLdiQ365xxrl1eJi8A==}
+  '@oclif/table@0.1.20':
+    resolution: {integrity: sha512-4zrGeBO7cjsnY9z30bDO6+kPZHXol5ZVsxP6lDKDeanLmkasEZt4btZhVfwyyZaWM22UXb1BDPeYX77r8+VWrw==}
     engines: {node: '>=18.0.0'}
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
@@ -2250,7 +2250,7 @@ snapshots:
     dependencies:
       '@inquirer/select': 2.5.0
       '@oclif/core': 4.0.29
-      '@oclif/table': 0.1.19
+      '@oclif/table': 0.1.20
       ansis: 3.3.2
       debug: 4.3.7
       filesize: 6.4.0
@@ -2264,7 +2264,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@oclif/table@0.1.19':
+  '@oclif/table@0.1.20':
     dependencies:
       '@oclif/core': 4.0.29
       '@types/react': 18.3.11
