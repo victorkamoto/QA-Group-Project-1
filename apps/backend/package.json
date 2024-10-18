@@ -15,7 +15,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^9.0.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
