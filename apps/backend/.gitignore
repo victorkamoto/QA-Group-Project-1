@@ -1,7 +1,1 @@
-.env
-
-
-
-# node moules
-
-node_modules/
+node_modules
