@@ -1,5 +1,5 @@
 {
-  "name": "QA-Group-Project-1",
+  "name": "backend",
   "workspaces": [
     "apps/*"
   ],
@@ -15,11 +15,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^9.0.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.7.4",
-    "concurrently": "^9.0.1",
     "express-validator": "7.2.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.7",
