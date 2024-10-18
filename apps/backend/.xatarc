@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://annrisper-s-workspace-oq612n.us-east-1.xata.sh/db/Task-Manager",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
