@@ -7,3 +7,4 @@ export type User = {
 };
 
 export type NewUser = Omit<User, 'id'>;
+export type LoginUser = Pick<User, 'email' | 'password'>
