@@ -1,4 +1,4 @@
-import { fetchUsers } from "../services/auth.services";
+import { fetchUsers } from "../services/user.services";
 import { Request, Response } from "express";
 
 /**
