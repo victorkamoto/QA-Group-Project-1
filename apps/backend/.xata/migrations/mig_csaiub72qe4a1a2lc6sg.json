@@ -1,0 +1,27 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csaiub72qe4a1a2lc6sg",
+    "operations": [
+      {
+        "add_column": {
+          "up": "''",
+          "table": "User",
+          "column": {
+            "pk": false,
+            "name": "email",
+            "type": "text",
+            "unique": true,
+            "comment": "",
+            "nullable": false
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csaiub72qe4a1a2lc6sg",
+  "parent": "mig_csaiu7f2qe4a1a2lc6qg",
+  "schema": "public",
+  "startedAt": "2024-10-20T16:26:21.202762Z"
+}

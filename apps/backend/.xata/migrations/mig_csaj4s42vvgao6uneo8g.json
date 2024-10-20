@@ -1,0 +1,27 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csaj4s42vvgao6uneo8g",
+    "operations": [
+      {
+        "add_column": {
+          "up": "''",
+          "table": "Comment",
+          "column": {
+            "pk": false,
+            "name": "content",
+            "type": "text",
+            "unique": false,
+            "comment": "",
+            "nullable": false
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csaj4s42vvgao6uneo8g",
+  "parent": "mig_csaj494jvfnl258s6760",
+  "schema": "public",
+  "startedAt": "2024-10-20T16:40:17.341979Z"
+}
