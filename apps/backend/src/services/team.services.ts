@@ -48,3 +48,19 @@ export const createTeam = async (team: CreateTeam) => {
         }
     }
 }
+
+/**
+ * Fetches all teams from the database.
+ *
+ * @returns {Promise<any>} A promise that resolves to the list of teams or an error message.
+ * @throws {Error} If there is an issue fetching the teams from the database.
+ */
+export const fetchTeams = async () => {
+    try {
+        const teams = await xata.db.Team.getAll();
+
+        return teams;
+    } catch (error: any) {
+        return error.toString();
+    }
+}
