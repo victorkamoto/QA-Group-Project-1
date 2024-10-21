@@ -14,7 +14,7 @@ export const create = async (req: Request, resp: Response) => {
         const { code, message, details } = await createTeam(req.body);
 
         resp.status(code).json({ message, details });
-    } catch (error) {
-
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
     }
 }
