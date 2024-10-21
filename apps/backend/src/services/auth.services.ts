@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import { xata } from '../utils'
 import { NewUser, LoginUser } from '../types/user.types';
 import { User } from '../xata';
+import { response } from 'express';
 
 config();
 
@@ -99,6 +100,12 @@ export const loginUser = async (user: LoginUser) => {
 
         const token = jwt.sign({ userId: user.xata_id }, jwtSecret, { expiresIn: jwtExpireIn });
         console.log("Credentials match, token generated!");
+
+        response.cookie('token-Cookie', token, {
+            maxAge: 15 * 60 * 1000,
+            httpOnly: true,
+            signed: true
+        });
 
         return { code: 200, token };
 
