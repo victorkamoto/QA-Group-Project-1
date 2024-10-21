@@ -101,12 +101,6 @@ export const loginUser = async (user: LoginUser) => {
         const token = jwt.sign({ userId: user.xata_id }, jwtSecret, { expiresIn: jwtExpireIn });
         console.log("Credentials match, token generated!");
 
-        response.cookie('token-Cookie', token, {
-            maxAge: 15 * 60 * 1000,
-            httpOnly: true,
-            signed: true
-        });
-
         return { code: 200, token };
 
     } catch (error: any) {

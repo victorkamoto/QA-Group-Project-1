@@ -55,6 +55,11 @@ export const login = async (req: Request, resp: Response) => {
         const result = await loginUser(req.body);
 
         if (result.code === 200) {
+            resp.cookie('token-Cookie', result.token, {
+                maxAge: 15 * 60 * 1000,
+                httpOnly: true,
+                signed: true
+            });
             resp.status(result.code).json({ token: result.token });
         } else {
             resp.status(result.code).json({ message: result.message });
