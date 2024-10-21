@@ -16,8 +16,8 @@ export const createUserSchema = checkSchema({
             errorMessage: 'email cannot be empty'
         },
         isLength: {
-            options: { min: 6, max: 20 },
-            errorMessage: 'email must be a string of 6-20 characters'
+            options: { min: 6, max: 50 },
+            errorMessage: 'email must be a string of 6-50 characters'
         },
         escape: true
     },
