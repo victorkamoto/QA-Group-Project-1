@@ -9,13 +9,5 @@
     "baseColor": "zinc",
     "cssVariables": false,
     "prefix": ""
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
   }
 }
-
