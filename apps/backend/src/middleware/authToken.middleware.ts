@@ -11,7 +11,7 @@ const authenticateTokenMiddleware = (
 ) => {
   const token = req.signedCookies["token-Cookie"];
 
-  const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+  const accessTokenSecret = process.env.JWT_SECRET;
 
   //user is unauthorized
   if (!token || token === "null") {
