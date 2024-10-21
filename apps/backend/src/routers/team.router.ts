@@ -6,7 +6,8 @@ import {
     getTeams,
     getTeamById,
     update,
-    addMember
+    addMember,
+    removeMember
 } from "../controllers/team.controller";
 
 const teamRouter = Router();
@@ -16,5 +17,6 @@ teamRouter.get('/:id', asyncHandler(getTeamById));
 teamRouter.post('/', createTeamSchema, asyncHandler(create));
 teamRouter.put('/:id', asyncHandler(update));
 teamRouter.post('/add', asyncHandler(addMember));
+teamRouter.post('/remove', asyncHandler(removeMember));
 
 export default teamRouter;

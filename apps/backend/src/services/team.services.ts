@@ -173,6 +173,16 @@ export const joinUserToTeam = async (userId: string, teamId: string) => {
             }
         }
 
+        const teamMember = await xata.db.TeamMember.filter({ teamId, userId }).getFirst();
+
+        if (teamMember) {
+            return {
+                code: 400,
+                message: 'Error adding member',
+                details: 'User is already a team member'
+            }
+        }
+
         const result = await xata.db.TeamMember.create({ teamId: teamId, userId: userId });
 
         return {
@@ -184,6 +194,54 @@ export const joinUserToTeam = async (userId: string, teamId: string) => {
         return {
             code: 500,
             message: 'Error joining team',
+            details: error.toString()
+        }
+    }
+}
+
+/**
+ * Removes a user from a team.
+ *
+ * @param userId - The ID of the user to be removed.
+ * @param teamId - The ID of the team from which the user will be removed.
+ * @returns An object containing the status code, message, and details of the operation.
+ *
+ * @example
+ * ```typescript
+ * const response = await removeUserFromTeam('user123', 'team456');
+ * console.log(response);
+ * // {
+ * //   code: 200,
+ * //   message: 'Removed team member!',
+ * //   details: { ... }
+ * // }
+ * ```
+ *
+ * @throws Will return an error object if the operation fails.
+ */
+export const removeUserFromTeam = async (userId: string, teamId: string) => {
+    try {
+        const teamMember = await xata.db.TeamMember.filter({ userId, teamId }).getFirst();
+
+        if (!teamMember) {
+            return {
+                code: 400,
+                message: 'Error removing user!',
+                details: 'Team member record not found!'
+            }
+        }
+
+        const result = await xata.db.TeamMember.delete(teamMember.xata_id);
+
+        return {
+            code: 200,
+            message: 'Removed team member!',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error removing member!',
             details: error.toString()
         }
     }

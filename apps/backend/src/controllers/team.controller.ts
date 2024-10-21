@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { JoinTeam, Team } from "../types/team.types";
+import { JoinTeam, Team, RemoveMember } from "../types/team.types";
 import {
     createTeam,
     fetchTeams,
     fetchTeamByid,
     updateTeam,
-    joinUserToTeam
+    joinUserToTeam,
+    removeUserFromTeam
 } from "../services/team.services";
 
 /**
@@ -118,6 +119,31 @@ export const addMember = async (req: Request, resp: Response) => {
 
         resp.status(code).json({ message, details });
 
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Removes a member from a team.
+ *
+ * @param req - The request object containing the member removal data.
+ * @param resp - The response object to send the result of the operation.
+ *
+ * @remarks
+ * The function expects the request body to contain the `userId` and `teamId` of the member to be removed.
+ * It calls the `removeUserFromTeam` function to perform the removal and sends the appropriate response.
+ *
+ * @throws Will send a 500 status code with an error message if an exception occurs.
+ */
+export const removeMember = async (req: Request, resp: Response) => {
+    const data: RemoveMember = req.body;
+
+    try {
+        const { userId, teamId } = data;
+        const { code, message, details } = await removeUserFromTeam(userId, teamId);
+
+        resp.status(code).json({ message, details });
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }
