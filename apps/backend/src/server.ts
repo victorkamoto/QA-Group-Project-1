@@ -1,8 +1,9 @@
 import express, { Express, Request, Response } from "express";
-import userRouter from "./routers/user.router";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { getXataClient } from "./xata";
+import userRouter from "./routers/user.router";
+import teamRouter from "./routers/team.router";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req: Request, resp: Response) => {
 });
 
 app.use("/users", userRouter);
+app.use('/teams', teamRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
