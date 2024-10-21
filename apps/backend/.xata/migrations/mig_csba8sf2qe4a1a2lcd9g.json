@@ -1,0 +1,27 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csba8sf2qe4a1a2lcd9g",
+    "operations": [
+      {
+        "add_column": {
+          "table": "TeamMember",
+          "column": {
+            "pk": false,
+            "name": "role",
+            "type": "text",
+            "unique": false,
+            "comment": "",
+            "default": "'member'",
+            "nullable": false
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csba8sf2qe4a1a2lcd9g",
+  "parent": "mig_csb9qcs2vvgao6unf19g",
+  "schema": "public",
+  "startedAt": "2024-10-21T18:58:59.016041Z"
+}

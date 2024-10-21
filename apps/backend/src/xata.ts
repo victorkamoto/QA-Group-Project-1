@@ -380,6 +380,99 @@ const tables = [
     ],
   },
   {
+    name: "TeamMember",
+    checkConstraints: {
+      TeamMember_xata_id_length_xata_id: {
+        name: "TeamMember_xata_id_length_xata_id",
+        columns: ["xata_id"],
+        definition: "CHECK ((length(xata_id) < 256))",
+      },
+    },
+    foreignKeys: {
+      teamId_link: {
+        name: "teamId_link",
+        columns: ["teamId"],
+        referencedTable: "Team",
+        referencedColumns: ["xata_id"],
+        onDelete: "CASCADE",
+      },
+      userId_link: {
+        name: "userId_link",
+        columns: ["userId"],
+        referencedTable: "User",
+        referencedColumns: ["xata_id"],
+        onDelete: "CASCADE",
+      },
+    },
+    primaryKey: [],
+    uniqueConstraints: {
+      _pgroll_new_TeamMember_xata_id_key: {
+        name: "_pgroll_new_TeamMember_xata_id_key",
+        columns: ["xata_id"],
+      },
+    },
+    columns: [
+      {
+        name: "role",
+        type: "text",
+        notNull: true,
+        unique: false,
+        defaultValue: "'member'::text",
+        comment: "",
+      },
+      {
+        name: "teamId",
+        type: "link",
+        link: { table: "Team" },
+        notNull: true,
+        unique: false,
+        defaultValue: null,
+        comment: '{"xata.link":"Team"}',
+      },
+      {
+        name: "userId",
+        type: "link",
+        link: { table: "User" },
+        notNull: true,
+        unique: false,
+        defaultValue: null,
+        comment: '{"xata.link":"User"}',
+      },
+      {
+        name: "xata_createdat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_id",
+        type: "text",
+        notNull: true,
+        unique: true,
+        defaultValue: "('rec_'::text || (xata_private.xid())::text)",
+        comment: "",
+      },
+      {
+        name: "xata_updatedat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_version",
+        type: "int",
+        notNull: true,
+        unique: false,
+        defaultValue: "0",
+        comment: "",
+      },
+    ],
+  },
+  {
     name: "User",
     checkConstraints: {
       User_xata_id_length_xata_id: {
@@ -484,6 +577,9 @@ export type TaskRecord = Task & XataRecord;
 export type Team = InferredTypes["Team"];
 export type TeamRecord = Team & XataRecord;
 
+export type TeamMember = InferredTypes["TeamMember"];
+export type TeamMemberRecord = TeamMember & XataRecord;
+
 export type User = InferredTypes["User"];
 export type UserRecord = User & XataRecord;
 
@@ -492,6 +588,7 @@ export type DatabaseSchema = {
   Project: ProjectRecord;
   Task: TaskRecord;
   Team: TeamRecord;
+  TeamMember: TeamMemberRecord;
   User: UserRecord;
 };
 
@@ -513,9 +610,6 @@ let instance: XataClient | undefined = undefined;
 export const getXataClient = () => {
   if (instance) return instance;
 
-  instance = new XataClient({
-    apiKey: process.env.XATA_API_KEY,
-    branch: process.env.XATA_BRANCH,
-  });
+  instance = new XataClient();
   return instance;
 };
