@@ -1,0 +1,33 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csaj494jvfnl258s6760",
+    "operations": [
+      {
+        "add_column": {
+          "up": "''",
+          "table": "Task",
+          "column": {
+            "pk": false,
+            "name": "assignedToId",
+            "type": "text",
+            "unique": false,
+            "comment": "{\"xata.link\":\"User\"}",
+            "nullable": false,
+            "references": {
+              "name": "assignedToId_link",
+              "table": "User",
+              "column": "xata_id",
+              "on_delete": "CASCADE"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csaj494jvfnl258s6760",
+  "parent": "mig_csaj3l72qe4a1a2lc740",
+  "schema": "public",
+  "startedAt": "2024-10-20T16:39:00.894845Z"
+}

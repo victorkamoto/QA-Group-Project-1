@@ -1,5 +1,5 @@
 {
-  "databaseURL": "https://annrisper-s-workspace-oq612n.us-east-1.xata.sh/db/Task-Manager",
+  "databaseURL": "https://Simon-Muchemi-s-workspace-hveses.us-east-1.xata.sh/db/task-management",
   "codegen": {
     "output": "src/xata.ts"
   }
