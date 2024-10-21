@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createTeam, fetchTeams, fetchTeamByid, updateTeam } from "../services/team.services";
-import { Team } from "../types/team.types";
+import { JoinTeam, Team } from "../types/team.types";
+import {
+    createTeam,
+    fetchTeams,
+    fetchTeamByid,
+    updateTeam,
+    joinUserToTeam
+} from "../services/team.services";
 
 /**
  * Creates a new team based on the request body.
@@ -85,6 +91,33 @@ export const update = async (req: Request, resp: Response) => {
         const { code, message, details } = await updateTeam(id, body);
 
         resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Adds a member to a team.
+ *
+ * @param req - The request object containing the body with user and team information.
+ * @param resp - The response object used to send back the HTTP response.
+ *
+ * @remarks
+ * This function extracts the userId and teamId from the request body and attempts to join the user to the specified team.
+ * If successful, it sends back a response with the status code, message, and details.
+ * If an error occurs, it catches the error and sends back a 500 status code with the error message.
+ *
+ * @throws Will throw an error if the joinUserToTeam function fails.
+ */
+export const addMember = async (req: Request, resp: Response) => {
+    const data: JoinTeam = req.body;
+
+    try {
+        const { userId, teamId } = data;
+        const { code, message, details } = await joinUserToTeam(userId, teamId);
+
+        resp.status(code).json({ message, details });
+
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }

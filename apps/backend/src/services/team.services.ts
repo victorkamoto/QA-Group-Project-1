@@ -1,5 +1,5 @@
 import { xata } from "../server";
-import { CreateTeam, Team, UpdateTeam } from "../types/team.types";
+import { CreateTeam, UpdateTeam } from "../types/team.types";
 
 /**
  * Creates a new team in the database.
@@ -35,6 +35,20 @@ export const createTeam = async (team: CreateTeam) => {
 
         const newTeam = await xata.db.Team.create({ name, description, adminId });
 
+        // join admin to TeamMember table
+        const teamMember = await xata.db.TeamMember.create({
+            teamId: newTeam.xata_id,
+            userId: adminId,
+            role: 'admin'
+        });
+
+        if (!teamMember) {
+            return {
+                code: 400,
+                message: 'error adding admin to team',
+                details: 'Could not add admin to team'
+            }
+        }
         return {
             code: 201,
             message: `${name} team created successfully!`,
@@ -115,5 +129,62 @@ export const updateTeam = async (id: string, body: UpdateTeam) => {
             message: 'Internal server error',
             details: error.toString()
         };
+    }
+}
+
+/**
+ * Joins a user to a team.
+ *
+ * @param userId - The ID of the user to join to the team.
+ * @param teamId - The ID of the team to join the user to.
+ * @returns An object containing the status code, message, and details of the operation.
+ *
+ * @example
+ * ```typescript
+ * const response = await joinUserToTeam('user123', 'team456');
+ * if (response.code === 200) {
+ *     console.log(response.message);
+ * } else {
+ *     console.error(response.message, response.details);
+ * }
+ * ```
+ *
+ * @throws Will return an error object if the operation fails.
+ */
+export const joinUserToTeam = async (userId: string, teamId: string) => {
+    try {
+        const user = await xata.db.User.filter({ xata_id: userId }).getFirst();
+
+        if (!user) {
+            return {
+                code: 400,
+                message: 'Error joining user',
+                details: 'User not found'
+            }
+        }
+
+        const team = await xata.db.Team.filter({ xata_id: teamId }).getFirst();
+
+        if (!team) {
+            return {
+                code: 400,
+                message: 'Error joining user',
+                details: 'User not found'
+            }
+        }
+
+        const result = await xata.db.TeamMember.create({ teamId: teamId, userId: userId });
+
+        return {
+            code: 200,
+            message: 'User joined to team successfully!',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error joining team',
+            details: error.toString()
+        }
     }
 }
