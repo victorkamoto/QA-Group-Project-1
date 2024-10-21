@@ -64,3 +64,14 @@ export const fetchTeams = async () => {
         return error.toString();
     }
 }
+
+
+export const fetchTeamByid = async (id: string) => {
+    try {
+        const team = await xata.db.Team.filter({ xata_id: id }).getFirst();
+
+        return team;
+    } catch (error: any) {
+        return error.toString();
+    }
+}

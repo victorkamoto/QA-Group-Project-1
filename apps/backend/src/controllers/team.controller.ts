@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createTeam, fetchTeams } from "../services/team.services";
+import { createTeam, fetchTeams, fetchTeamByid } from "../services/team.services";
 
 /**
  * Creates a new team based on the request body.
@@ -42,6 +42,18 @@ export const getTeams = async (req: Request, resp: Response) => {
         const teams = await fetchTeams();
 
         resp.json(teams);
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+export const getTeamById = async (req: Request, resp: Response) => {
+    const id: string = req.params.id;
+
+    try {
+        const team = await fetchTeamByid(id);
+
+        resp.json(team);
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }
