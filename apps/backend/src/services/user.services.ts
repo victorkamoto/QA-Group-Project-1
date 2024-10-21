@@ -1,4 +1,4 @@
-import { xata } from "../utils";
+import { xata } from "../server";
 
 /**
  * Fetches all users from the database.
@@ -8,11 +8,11 @@ import { xata } from "../utils";
  * @throws {Error} If there is an issue fetching the users from the database.
  */
 export const fetchUsers = async () => {
-    try {
-        const users = xata.db.User.getAll();
+  try {
+    const users = xata.db.User.getAll();
 
-        return users;
-    } catch (error: any) {
-        return error.toString();
-    }
-}
+    return users;
+  } catch (error: any) {
+    return error.toString();
+  }
+};
