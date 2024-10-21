@@ -4,7 +4,6 @@ import { config } from "dotenv";
 import { xata } from "../server";
 import { NewUser, LoginUser } from "../types/user.types";
 import { User } from "../xata";
-import { response } from "express";
 
 config();
 
