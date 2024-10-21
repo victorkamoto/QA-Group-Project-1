@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:frontend": "pnpm --filter frontend dev",
-    "dev:backend": "pnpm --filter backend start",
+    "dev:backend": "pnpm --filter backend dev",
     "dev": "concurrently --names 'frontend,backend' --prefix-colors 'blue,green' \"pnpm --filter frontend dev\" \"pnpm --filter backend start\""
   },
   "keywords": [],
