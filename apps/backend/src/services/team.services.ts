@@ -1,5 +1,5 @@
 import { xata } from "../server";
-import { CreateTeam } from "../types/team.types";
+import { CreateTeam, Team, UpdateTeam } from "../types/team.types";
 
 /**
  * Creates a new team in the database.
@@ -66,6 +66,12 @@ export const fetchTeams = async () => {
 }
 
 
+/**
+ * Fetches a team by its ID from the database.
+ *
+ * @param id - The unique identifier of the team.
+ * @returns A promise that resolves to the team object if found, or an error message if an error occurs.
+ */
 export const fetchTeamByid = async (id: string) => {
     try {
         const team = await xata.db.Team.filter({ xata_id: id }).getFirst();
@@ -73,5 +79,41 @@ export const fetchTeamByid = async (id: string) => {
         return team;
     } catch (error: any) {
         return error.toString();
+    }
+}
+
+/**
+ * Updates a team with the given ID using the provided body data.
+ *
+ * @param id - The unique identifier of the team to be updated.
+ * @param body - The data to update the team with.
+ * @returns An object containing the status code, message, and details of the operation.
+ *
+ * @throws Will return a 500 status code and error message if an internal server error occurs.
+ */
+export const updateTeam = async (id: string, body: UpdateTeam) => {
+    try {
+        const team = await xata.db.Team.filter({ xata_id: id }).getFirst();
+
+        if (!team) {
+            return {
+                code: 404,
+                message: `Team with id: ${id} cannot be found!`
+            }
+        }
+
+        const result = await xata.db.Team.update(id, body);
+
+        return {
+            code: 200,
+            message: 'Team updated successfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        };
     }
 }

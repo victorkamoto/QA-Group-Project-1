@@ -5,4 +5,5 @@ export type Team = {
 }
 
 export type CreateTeam = Team;
+export type UpdateTeam = Partial<Team>;
 export type DeleteTeam = Pick<Team, 'adminId'>;
