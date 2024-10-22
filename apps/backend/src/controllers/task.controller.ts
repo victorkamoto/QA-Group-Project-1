@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createTask, fetchTasks, fetchTaskByid } from "../services/task.services";
+import { createTask, fetchTasks, fetchTaskByid, updateTask } from "../services/task.services";
+import { UpdateTask } from "../types/task.types";
 
 
 /**
@@ -64,6 +65,29 @@ export const getTasks = async (req: Request, resp: Response) => {
 export const getTaskById = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await fetchTaskByid(req.params.id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Updates a task with the given ID using the provided request body.
+ *
+ * @param req - The request object containing the task ID in the parameters and the update data in the body.
+ * @param resp - The response object used to send back the status and result of the update operation.
+ *
+ * @returns A promise that resolves to a JSON response with the status code, message, and details of the update operation.
+ *
+ * @throws Will return a 500 status code and an error message if the update operation fails.
+ */
+export const update = async (req: Request, resp: Response) => {
+    const id: string = req.params.id;
+    const body: UpdateTask = req.body;
+
+    try {
+        const { code, message, details } = await updateTask(id, body);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {
