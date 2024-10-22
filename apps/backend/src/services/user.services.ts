@@ -9,7 +9,7 @@ import { xata } from "../server";
  */
 export const fetchUsers = async () => {
   try {
-    const users = xata.db.User.getAll();
+    const users = await xata.db.User.getAll();
 
     return users;
   } catch (error: any) {

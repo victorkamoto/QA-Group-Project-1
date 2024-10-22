@@ -1,12 +1,17 @@
 import express, { Express, Request, Response } from "express";
-import userRouter from "./routers/user.router";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { getXataClient } from "./xata";
+import { getXataClient, XataClient } from "./xata";
+import userRouter from "./routers/user.router";
+import teamRouter from "./routers/team.router";
 
 dotenv.config();
 
-export const xata = getXataClient();
+// export const xata = getXataClient();
+export const xata = new XataClient({
+  apiKey: process.env.XATA_API_KEY,
+  branch: process.env.XATA_BRANCH
+})
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3500;
@@ -19,6 +24,7 @@ app.get("/", (req: Request, resp: Response) => {
 });
 
 app.use("/users", userRouter);
+app.use('/teams', teamRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
