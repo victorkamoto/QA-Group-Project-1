@@ -7,7 +7,8 @@ import {
     fetchTeamByid,
     updateTeam,
     joinUserToTeam,
-    removeUserFromTeam
+    removeUserFromTeam,
+    deleteTeamFromStorage
 } from "../services/team.services";
 
 /**
@@ -148,3 +149,15 @@ export const removeMember = async (req: Request, resp: Response) => {
         resp.status(500).json({ error: error.toString() });
     }
 }
+
+export const deleteTeam = async (req: Request, resp: Response) => {
+    try {
+        const id: string = req.params.id;
+        const { code, message, details } = await deleteTeamFromStorage(id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+

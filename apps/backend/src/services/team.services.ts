@@ -258,3 +258,33 @@ export const removeUserFromTeam = async (userId: string, teamId: string) => {
         }
     }
 }
+
+export const deleteTeamFromStorage = async (id: string) => {
+    try {
+        // check if team exists
+        const team = await xata.db.Team.filter({ xata_id: id }).getFirst();
+
+        if (!team) {
+            return {
+                code: 404,
+                message: 'Team not found',
+                details: 'Team does not exist'
+            }
+        }
+
+        // delete team
+        const result = await xata.db.Team.delete(id);
+
+        return {
+            code: 200,
+            message: 'Team deleted successfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error deleting team',
+            details: error.toString()
+        }
+    }
+}
