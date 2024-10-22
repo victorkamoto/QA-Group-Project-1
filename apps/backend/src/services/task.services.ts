@@ -245,3 +245,48 @@ export const deleteTaskFromProject = async (taskId: string) => {
         }
     }
 }
+
+/**
+ * Updates the status of a task.
+ *
+ * @param {string} taskId - The ID of the task to update.
+ * @param {string} status - The new status of the task. Must be either 'in-progress' or 'completed'.
+ * @returns {Promise<{code: number, message: string, details: any}>} - An object containing the status code, message, and details of the operation.
+ *
+ * @throws {Error} - Throws an error if there is an issue with the database operation.
+ */
+export const updateTaskStatus = async (taskId: string, status: string) => {
+    try {
+        if (!isValidStatus(status)) {
+            return {
+                code: 400,
+                message: 'Invalid status!',
+                details: `status must be 'in-progress' or 'completed'!`
+            }
+        }
+
+        const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
+
+        if (!task) {
+            return {
+                code: 404,
+                message: 'Error updating task',
+                details: `Task with id ${taskId} does not exist!`
+            }
+        }
+
+        const result = await xata.db.Task.update(taskId, { status });
+
+        return {
+            code: 200,
+            message: 'Task status updated successfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}

@@ -6,7 +6,8 @@ import {
     getTasks,
     getTaskById,
     update,
-    deleteTask
+    deleteTask,
+    updateStatus
 } from "../controllers/task.controller";
 
 const taskRouter = Router();
@@ -15,6 +16,7 @@ taskRouter.post('/', createTaskSchema, asyncHandler(create));
 taskRouter.get('/', asyncHandler(getTasks));
 taskRouter.get('/:id', asyncHandler(getTaskById));
 taskRouter.put('/:id', asyncHandler(update));
+taskRouter.patch('/:id', asyncHandler(updateStatus));
 taskRouter.delete('/:id', asyncHandler(deleteTask));
 
 export default taskRouter;

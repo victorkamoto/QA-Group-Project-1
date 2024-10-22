@@ -6,7 +6,8 @@ import {
     fetchTasks,
     fetchTaskByid,
     updateTask,
-    deleteTaskFromProject
+    deleteTaskFromProject,
+    updateTaskStatus
 } from "../services/task.services";
 
 
@@ -114,6 +115,26 @@ export const update = async (req: Request, resp: Response) => {
 export const deleteTask = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await deleteTaskFromProject(req.params.id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Updates the status of a task.
+ *
+ * @param req - The request object containing the task ID in the parameters and the new status in the body.
+ * @param resp - The response object used to send the status code and JSON response.
+ *
+ * @returns A promise that resolves to a JSON response with the status code, message, and details of the update operation.
+ *
+ * @throws Will return a 500 status code and error message if an error occurs during the update process.
+ */
+export const updateStatus = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await updateTaskStatus(req.params.id, req.body.status);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {
