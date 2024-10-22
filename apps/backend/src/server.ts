@@ -3,6 +3,7 @@ import userRouter from "./routers/user.router";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { getXataClient } from "./xata";
+import cors from "cors";
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ export const xata = getXataClient();
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3500;
-
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
