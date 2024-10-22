@@ -259,6 +259,20 @@ export const removeUserFromTeam = async (userId: string, teamId: string) => {
     }
 }
 
+/**
+ * Deletes a team from the storage by its ID.
+ *
+ * @param {string} id - The ID of the team to be deleted.
+ * @returns {Promise<{code: number, message: string, details: any}>} - A promise that resolves to an object containing the status code, message, and details of the operation.
+ *
+ * @example
+ * const response = await deleteTeamFromStorage('team-id');
+ * if (response.code === 200) {
+ *     console.log(response.message); // 'Team deleted successfully'
+ * } else {
+ *     console.error(response.message); // 'Team not found' or 'Error deleting team'
+ * }
+ */
 export const deleteTeamFromStorage = async (id: string) => {
     try {
         // check if team exists

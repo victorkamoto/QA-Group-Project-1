@@ -150,6 +150,16 @@ export const removeMember = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * Deletes a team based on the provided team ID.
+ *
+ * @param req - The request object containing the team ID in the parameters.
+ * @param resp - The response object used to send back the HTTP response.
+ *
+ * @returns A JSON response with the status code, message, and details of the deletion operation.
+ *
+ * @throws Will return a 500 status code and an error message if an exception occurs during the deletion process.
+ */
 export const deleteTeam = async (req: Request, resp: Response) => {
     try {
         const id: string = req.params.id;
