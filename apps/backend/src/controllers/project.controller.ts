@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createProject, fetchProjects, fetchProjectById, updateProject } from "../services/project.services";
+import {
+    createProject,
+    fetchProjects,
+    fetchProjectById,
+    updateProject,
+    deleteProjectFromStorage
+} from "../services/project.services";
 
 /**
  * Creates a new project.
@@ -85,6 +91,26 @@ export const update = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await updateProject(req.params.id, req.body);
 
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Deletes a project based on the provided project ID.
+ *
+ * @param req - The request object containing the project ID in the parameters.
+ * @param resp - The response object used to send the status and result back to the client.
+ *
+ * @returns A JSON response with the status code, message, and details if successful,
+ *          or an error message if an exception occurs.
+ *
+ * @throws Will return a 500 status code and error message if an exception occurs during deletion.
+ */
+export const deleteProject = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await deleteProjectFromStorage(req.params.id);
         resp.status(code).json({ message, details });
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });

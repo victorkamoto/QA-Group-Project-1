@@ -182,3 +182,45 @@ export const updateProject = async (projectId: string, body: UpdateProject) => {
         }
     }
 }
+
+/**
+ * Deletes a project from the storage by its ID.
+ *
+ * @param {string} projectId - The ID of the project to be deleted.
+ * @returns {Promise<{ code: number, message: string, details: any }>} - A promise that resolves to an object containing the status code, message, and details of the operation.
+ *
+ * @example
+ * const response = await deleteProjectFromStorage('project-id-123');
+ * if (response.code === 200) {
+ *     console.log(response.message); // Project deleted successfully
+ * } else {
+ *     console.error(response.message); // Error deleting project!
+ * }
+ */
+export const deleteProjectFromStorage = async (projectId: string) => {
+    try {
+        const project = await xata.db.Project.filter({ xata_id: projectId }).getFirst();
+
+        if (!project) {
+            return {
+                code: 404,
+                message: 'Error deleting project!',
+                details: `Project with id ${projectId} not found!`
+            }
+        }
+
+        const result = await xata.db.Project.delete(projectId);
+
+        return {
+            code: 200,
+            message: 'Project deleted succesfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error deleting project!',
+            details: error.toString()
+        }
+    }
+}
