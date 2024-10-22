@@ -52,6 +52,16 @@ export const getProjects = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * Retrieves a project by its ID.
+ *
+ * @param req - The request object containing the project ID in the parameters.
+ * @param resp - The response object used to send the response back to the client.
+ *
+ * @returns A JSON response with the project details if found, or an error message if not.
+ *
+ * @throws Will return a 500 status code with an error message if an exception occurs.
+ */
 export const getProjectById = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await fetchProjectById(req.params.id);

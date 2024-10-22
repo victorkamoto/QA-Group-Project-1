@@ -74,6 +74,22 @@ export const fetchProjects = async () => {
     }
 }
 
+/**
+ * Fetches a project by its ID.
+ *
+ * @param teamId - The ID of the team whose project is to be fetched.
+ * @returns A promise that resolves to an object containing the status code, message, and project details if found, or an error message if not found or if an error occurs.
+ *
+ * @example
+ * ```typescript
+ * const result = await fetchProjectById('team123');
+ * if (result.code === 200) {
+ *     console.log(result.message, result.details);
+ * } else {
+ *     console.error(result.message, result.details);
+ * }
+ * ```
+ */
 export const fetchProjectById = async (teamId: string) => {
     try {
         const project = await xata.db.Project.filter({ xata_id: teamId }).getFirst();
