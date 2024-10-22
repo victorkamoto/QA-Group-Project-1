@@ -233,7 +233,7 @@ const tables = [
       },
       {
         name: "dueDate",
-        type: "text",
+        type: "datetime",
         notNull: true,
         unique: false,
         defaultValue: null,
