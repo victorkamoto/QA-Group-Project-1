@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createTask, fetchTasks } from "../services/task.services";
+import { createTask, fetchTasks, fetchTaskByid } from "../services/task.services";
 
 
 /**
@@ -46,6 +46,26 @@ export const getTasks = async (req: Request, resp: Response) => {
         const tasks = await fetchTasks();
 
         resp.json(tasks);
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+
+}
+/**
+ * Retrieves a task by its ID.
+ *
+ * @param req - The request object containing the task ID in the parameters.
+ * @param resp - The response object used to send the status and JSON data.
+ *
+ * @returns A promise that resolves to a JSON response containing the task details or an error message.
+ *
+ * @throws Will return a 500 status code and an error message if an exception occurs.
+ */
+export const getTaskById = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await fetchTaskByid(req.params.id);
+
+        resp.status(code).json({ message, details });
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }

@@ -118,3 +118,41 @@ export const fetchTasks = async () => {
         return error.toString();
     }
 }
+
+/**
+ * Fetches a task by its ID from the database.
+ *
+ * @param {string} id - The ID of the task to fetch.
+ * @returns {Promise<{code: number, message: string, details: any}>} - A promise that resolves to an object containing the status code, message, and task details or error information.
+ *
+ * @example
+ * const result = await fetchTaskByid('12345');
+ * if (result.code === 200) {
+ *     console.log('Task found:', result.details);
+ * } else {
+ *     console.log('Error:', result.message);
+ * }
+ *
+ * @throws {Error} - Throws an error if the database query fails.
+ */
+export const fetchTaskByid = async (id: string) => {
+    try {
+        const task = await xata.db.Task.filter({ xata_id: id }).getFirst();
+
+        if (!task) {
+            return {
+                code: 404,
+                message: 'task not found!',
+                details: 'task with id \`${id}\` not found!'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'task found!',
+            details: task
+        }
+    } catch (error: any) {
+        return error.toString();
+    }
+}
