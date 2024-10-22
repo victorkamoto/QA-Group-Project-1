@@ -22,13 +22,13 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
-app.get("/", (req: Request, resp: Response) => {
+app.get("/hello", (req: Request, resp: Response) => {
   resp.json({ msg: "Hello" });
 });
 
-app.use("/users", userRouter);
-app.use("/teams", teamRouter);
-app.use("/projects", projectRouter);
+app.use("/", userRouter);
+app.use('/teams', teamRouter);
+app.use('/projects', projectRouter)
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
