@@ -1,9 +1,9 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { config } from "dotenv";
-import { xata } from "../server";
-import { NewUser, LoginUser } from "../types/user.types";
-import { User } from "../xata";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { config } from 'dotenv';
+import { xata } from '../server';
+import { NewUser, LoginUser } from '../types/user.types';
+import { User } from '../xata';
 
 config();
 
@@ -32,7 +32,7 @@ export const registerUser = async (user: NewUser) => {
     const existingUser = await xata.db.User.filter({ email }).getFirst();
 
     if (existingUser) {
-      return { code: 400, message: "User already exists!" };
+      return { code: 400, message: 'User already exists!' };
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,22 +40,22 @@ export const registerUser = async (user: NewUser) => {
       name,
       email,
       password: hashedPassword,
-      role: role || 'member'
+      role: role || 'member',
     });
 
     return {
       code: 201,
-      message: "User created successfully!",
+      message: 'User created successfully!',
       details: {
         email: newUser.email,
         name: newUser.name,
-        role: newUser.role
+        role: newUser.role,
       },
     };
   } catch (error: any) {
     return {
       code: 500,
-      message: "Registration error!",
+      message: 'Registration error!',
       details: error.toString(),
     };
   }
@@ -75,40 +75,40 @@ export const loginUser = async (user: LoginUser) => {
   const { email, password } = user;
 
   try {
-    console.log("Retrieving user from database...");
+    console.log('Retrieving user from database...');
     const user: User | null = await xata.db.User.filter({ email }).getFirst();
 
     if (!user) {
-      console.log("User not found");
-      return { code: 400, message: "Invalid credentials!" };
+      console.log('User not found');
+      return { code: 400, message: 'Invalid credentials!' };
     }
 
-    console.log("User found, comparing passwords...");
+    console.log('User found, comparing passwords...');
     const isMatch: boolean = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      console.log("Password does not match");
-      return { code: 400, message: "Invalid credentials!" };
+      console.log('Password does not match');
+      return { code: 400, message: 'Invalid credentials!' };
     }
 
-    console.log("Password matches, checking environment variables...");
+    console.log('Password matches, checking environment variables...');
     const jwtSecret = process.env.JWT_SECRET;
     const jwtExpireIn = process.env.JWT_EXPIRES_IN;
 
     if (!jwtSecret || !jwtExpireIn) {
       throw new Error(
-        "JWT_SECRET or JWT_EXPIRES_IN is not defined in environment variables"
+        'JWT_SECRET or JWT_EXPIRES_IN is not defined in environment variables'
       );
     }
 
     const token = jwt.sign({ userId: user.xata_id }, jwtSecret, {
       expiresIn: jwtExpireIn,
     });
-    console.log("Credentials match, token generated!");
+    console.log('Credentials match, token generated!');
 
     return { code: 200, token };
   } catch (error: any) {
-    console.error("Error during login:", error);
+    console.error('Error during login:', error);
     return {
       code: 500,
       message: `Login error: ${error.toString()}`,
