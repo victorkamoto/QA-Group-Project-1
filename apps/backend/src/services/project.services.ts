@@ -1,5 +1,5 @@
 import { xata } from "../server";
-import { NewProject } from "../types/project.types";
+import { NewProject, UpdateProject } from "../types/project.types";
 
 /**
  * Creates a new project.
@@ -111,6 +111,73 @@ export const fetchProjectById = async (teamId: string) => {
         return {
             code: 500,
             message: 'Error fetching project!',
+            details: error.toString()
+        }
+    }
+}
+
+/**
+ * Updates a project with the given project ID and update data.
+ *
+ * @param {string} projectId - The ID of the project to update.
+ * @param {UpdateProject} body - The data to update the project with.
+ * @returns {Promise<{code: number, message: string, details: any}>} - A promise that resolves to an object containing the status code, message, and details of the update operation.
+ *
+ * @throws {Error} - If an error occurs during the update process.
+ *
+ * @example
+ * const updateData = {
+ *   name: "New Project Name",
+ *   teamId: "team123",
+ *   description: "Updated project description"
+ * };
+ * 
+ * updateProject("project123", updateData)
+ *   .then(response => {
+ *     if (response.code === 200) {
+ *       console.log("Project updated successfully:", response.details);
+ *     } else {
+ *       console.error("Failed to update project:", response.message);
+ *     }
+ *   })
+ *   .catch(error => {
+ *     console.error("Error updating project:", error);
+ *   });
+ */
+export const updateProject = async (projectId: string, body: UpdateProject) => {
+    try {
+        const existsingProject = await xata.db.Project.filter({ xata_id: projectId });
+
+        if (!existsingProject) {
+            return {
+                code: 404,
+                message: 'Error updating project!',
+                details: `Project with id '${projectId}' not found!`
+            }
+        }
+
+        // check if team exists
+        const team = await xata.db.Team.filter({ xata_id: body.teamId }).getFirst();
+
+        if (!team) {
+            return {
+                code: 404,
+                message: 'Error updating project!',
+                details: `Team with id ${body.teamId} does not exist!`
+            }
+        }
+
+        const result = await xata.db.Project.update(projectId, body);
+
+        return {
+            code: 200,
+            message: 'Updated project successfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error updating project!',
             details: error.toString()
         }
     }

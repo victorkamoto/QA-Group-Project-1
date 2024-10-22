@@ -5,3 +5,4 @@ type Project = {
 }
 
 export type NewProject = Omit<Project, 'xata_id'>;
+export type UpdateProject = Partial<Pick<Project, 'name' | 'teamId'>>

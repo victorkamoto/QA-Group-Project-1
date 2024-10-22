@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createProject, fetchProjects, fetchProjectById } from "../services/project.services";
+import { createProject, fetchProjects, fetchProjectById, updateProject } from "../services/project.services";
 
 /**
  * Creates a new project.
@@ -65,6 +65,25 @@ export const getProjects = async (req: Request, resp: Response) => {
 export const getProjectById = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await fetchProjectById(req.params.id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Updates a project with the given ID using the provided request body.
+ *
+ * @param req - The request object containing the project ID in the parameters and the update data in the body.
+ * @param resp - The response object used to send back the status and result of the update operation.
+ * @returns A promise that resolves to the response status and JSON data.
+ *
+ * @throws Will return a 500 status code and an error message if the update operation fails.
+ */
+export const update = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await updateProject(req.params.id, req.body);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {
