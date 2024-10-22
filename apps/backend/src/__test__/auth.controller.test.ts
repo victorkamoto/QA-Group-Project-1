@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app, { xata } from '../../src/server';
-import { create, login } from '../../src/controllers/auth.controller';
+import { register, login } from '../../src/controllers/auth.controller';
 
 describe('Auth Controller', () => {
   it('should create a new user successfully', async () => {
@@ -9,7 +9,7 @@ describe('Auth Controller', () => {
       email: 'john.doe@examplwwt.com',
       password: 'securePassword123',
     };
-    const response = await request(app).post('/users/register').send(userData);
+    const response = await request(app).post('/auth/register').send(userData);
     console.log(response);
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty(
@@ -27,7 +27,7 @@ describe('Auth Controller', () => {
           password: 'password',
         };
         const response = await request(app)
-          .post('/users/register')
+          .post('/auth/register')
           .send(userData);
         console.log(response);
         expect(response.status).toBe(400);
@@ -41,7 +41,7 @@ describe('Auth Controller', () => {
           password: 'password',
         };
         const response = await request(app)
-          .post('/users/register')
+          .post('/auth/register')
           .send(userData);
         console.log(response);
         expect(response.status).toBe(400);
@@ -54,7 +54,7 @@ describe('Auth Controller', () => {
           password: 'pass',
         };
         const response = await request(app)
-          .post('/users/register')
+          .post('/auth/register')
           .send(userData);
         console.log(response);
         expect(response.status).toBe(400);
@@ -67,7 +67,7 @@ describe('Auth Controller', () => {
       name: 'John Doe',
       email: 'invalid@example.com',
     };
-    const response = await request(app).post('/users/register').send(userData);
+    const response = await request(app).post('/auth/register').send(userData);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('errors');
   });
@@ -77,7 +77,7 @@ describe('Auth Controller', () => {
       email: 'john.doe@examplwwt.com',
       password: 'securePassword123',
     };
-    const response = await request(app).post('/users/login').send(userData);
+    const response = await request(app).post('/auth/login').send(userData);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('token');
   });
@@ -87,7 +87,7 @@ describe('Auth Controller', () => {
       email: 'invalid@example.com',
       password: 'wrongPassword',
     };
-    const response = await request(app).post('/users/login').send(userData);
+    const response = await request(app).post('/auth/login').send(userData);
     console.log(response);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('message', 'Invalid credentials!');
