@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createTask, fetchTasks, fetchTaskByid, updateTask } from "../services/task.services";
 import { UpdateTask } from "../types/task.types";
+import {
+    createTask,
+    fetchTasks,
+    fetchTaskByid,
+    updateTask,
+    deleteTaskFromProject
+} from "../services/task.services";
 
 
 /**
@@ -88,6 +94,26 @@ export const update = async (req: Request, resp: Response) => {
 
     try {
         const { code, message, details } = await updateTask(id, body);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Deletes a task from a project.
+ *
+ * @param req - The request object containing the task ID in the parameters.
+ * @param resp - The response object used to send the status and JSON response.
+ *
+ * @returns A JSON response with the status code, message, and details of the deletion operation.
+ *
+ * @throws Will return a 500 status code and error message if an exception occurs during the deletion process.
+ */
+export const deleteTask = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await deleteTaskFromProject(req.params.id);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {

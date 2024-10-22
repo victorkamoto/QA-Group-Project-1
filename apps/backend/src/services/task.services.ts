@@ -169,7 +169,7 @@ export const fetchTaskByid = async (id: string) => {
  */
 export const updateTask = async (taskId: string, body: UpdateTask) => {
     try {
-        const task = await xata.db.Task.filter({ xata_id: taskId}).getFirst();
+        const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
 
         if (!task) {
             return {
@@ -201,5 +201,47 @@ export const updateTask = async (taskId: string, body: UpdateTask) => {
             message: 'Internal server error',
             details: error.toString()
         };
+    }
+}
+
+/**
+ * Deletes a task from a project based on the provided task ID.
+ *
+ * @param {string} taskId - The ID of the task to be deleted.
+ * @returns {Promise<{ code: number, message: string, details: any }>} - A promise that resolves to an object containing the status code, message, and details of the operation.
+ *
+ * @example
+ * const response = await deleteTaskFromProject('task-id-123');
+ * if (response.code === 200) {
+ *     console.log(response.message); // Task deleted successfully
+ * } else {
+ *     console.error(response.message); // Error deleting task
+ * }
+ */
+export const deleteTaskFromProject = async (taskId: string) => {
+    try {
+        const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
+
+        if (!task) {
+            return {
+                code: 404,
+                message: 'Error deleting task',
+                details: `Task with id ${taskId} does not exist!`
+            }
+        }
+
+        const result = await xata.db.Task.delete(taskId);
+
+        return {
+            code: 200,
+            message: 'Task deleted successfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
     }
 }
