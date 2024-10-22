@@ -90,7 +90,19 @@ export const fetchTeamByid = async (id: string) => {
     try {
         const team = await xata.db.Team.filter({ xata_id: id }).getFirst();
 
-        return team;
+        if (!team) {
+            return {
+                code: 404,
+                message: 'Team not found!',
+                details: 'Team with id \`${id}\` not found!'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Team found!',
+            details: team
+        }
     } catch (error: any) {
         return error.toString();
     }

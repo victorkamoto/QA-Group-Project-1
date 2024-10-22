@@ -66,9 +66,9 @@ export const getTeamById = async (req: Request, resp: Response) => {
     const id: string = req.params.id;
 
     try {
-        const team = await fetchTeamByid(id);
+        const { code, message, details } = await fetchTeamByid(id);
 
-        resp.json(team);
+        resp.status(code).json({ message, details });
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }
