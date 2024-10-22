@@ -29,3 +29,5 @@ app.use('/teams', teamRouter);
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
 });
+
+export default app;
