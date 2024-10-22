@@ -208,6 +208,10 @@ const tables = [
     },
     primaryKey: [],
     uniqueConstraints: {
+      Task__pgroll_new_description_key: {
+        name: "Task__pgroll_new_description_key",
+        columns: ["description"],
+      },
       _pgroll_new_Task_xata_id_key: {
         name: "_pgroll_new_Task_xata_id_key",
         columns: ["xata_id"],
@@ -227,13 +231,13 @@ const tables = [
         name: "description",
         type: "text",
         notNull: true,
-        unique: false,
+        unique: true,
         defaultValue: null,
         comment: "",
       },
       {
         name: "dueDate",
-        type: "text",
+        type: "datetime",
         notNull: true,
         unique: false,
         defaultValue: null,
