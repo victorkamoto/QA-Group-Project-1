@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import { getXataClient } from "./xata";
+import cors from "cors";
 import { XataClient } from "./xata";
 import userRouter from "./routers/user.router";
 import teamRouter from "./routers/team.router";
@@ -11,12 +13,12 @@ dotenv.config();
 // export const xata = getXataClient();
 export const xata = new XataClient({
   apiKey: process.env.XATA_API_KEY,
-  branch: process.env.XATA_BRANCH
-})
+  branch: process.env.XATA_BRANCH,
+});
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3500;
-
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 

@@ -32,14 +32,8 @@ export function MainNav({ items, children }: MainNavProps) {
   return (
     <div className="flex grow gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        {/* TODO: */}
-        {/* <Image
-          src=""
-          alt="Task Manager"
-          width={0}
-          height={0}
-          className="h-auto w-[150px]"
-        /> */}
+        <Image src={"logo.svg"} alt="logo" width={50} height={50} />
+        <span className="text-xl">Task Manager</span>
       </Link>
       {items?.length ? (
         <nav className="hidden w-3/4 gap-6 md:flex">
@@ -76,7 +70,7 @@ export function MainNav({ items, children }: MainNavProps) {
                         </NavigationMenuLink>
                       </Link>
                     </NavigationMenuItem>
-                  )
+                  ),
                 )}
               </NavigationMenuList>
             </NavigationMenu>
