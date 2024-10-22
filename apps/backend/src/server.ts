@@ -5,6 +5,7 @@ import { XataClient } from "./xata";
 import userRouter from "./routers/user.router";
 import teamRouter from "./routers/team.router";
 import projectRouter from "./routers/project.router";
+import taskRouter from "./routers/task.router";
 
 dotenv.config();
 
@@ -26,7 +27,8 @@ app.get("/", (req: Request, resp: Response) => {
 
 app.use("/users", userRouter);
 app.use('/teams', teamRouter);
-app.use('/projects', projectRouter)
+app.use('/projects', projectRouter);
+app.use('/tasks', taskRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
