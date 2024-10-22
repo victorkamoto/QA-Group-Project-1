@@ -4,7 +4,6 @@ import { config } from "dotenv";
 import { xata } from "../server";
 import { NewUser, LoginUser } from "../types/user.types";
 import { User } from "../xata";
-import { response } from "express";
 
 config();
 
@@ -27,7 +26,7 @@ config();
  * });
  */
 export const registerUser = async (user: NewUser) => {
-  const { name, email, password } = user;
+  const { name, email, password, role } = user;
 
   try {
     const existingUser = await xata.db.User.filter({ email }).getFirst();
@@ -41,6 +40,7 @@ export const registerUser = async (user: NewUser) => {
       name,
       email,
       password: hashedPassword,
+      role: role || 'member'
     });
 
     return {
@@ -49,6 +49,7 @@ export const registerUser = async (user: NewUser) => {
       details: {
         email: newUser.email,
         name: newUser.name,
+        role: newUser.role
       },
     };
   } catch (error: any) {
