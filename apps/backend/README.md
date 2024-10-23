@@ -1,17 +1,20 @@
 # Task Management App - Backend
 
-This is the backend implementation for the **Task Management App**. The backend is built using **Node.js**, **Express**, **TypeScript**, and **Xata** for the database. The app allows users to create or join teams, manage tasks within projects, and interact with task comments and notifications.
+This is the backend implementation for the [**Task Management App**](#task-management-app---backend). The backend is built using [**Node.js**](https://nodejs.org/), [**Express**](https://expressjs.com/), [**TypeScript**](https://www.typescriptlang.org/), and [**Xata**](https://xata.io/) for the database. The app allows users to create or join teams, manage tasks within projects, and interact with task comments and notifications.
 
 ## Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Project Structure](#project-structure)
-4. [Installation](#installation)
-5. [API Endpoints](#api-endpoints)
-6. [Database Structure](#database-structure)
-7. [Testing](#testing)
-8. [Technologies Used](#technologies-used)
+- [Task Management App - Backend](#task-management-app---backend)
+  - [Table of Contents](#table-of-contents)
+  - [Project Overview](#project-overview)
+  - [Features](#features)
+  - [Project Structure](#project-structure)
+    - [Tables/Models](#tablesmodels)
+    - [Routes](#routes)
+    - [Controllers](#controllers)
+    - [Middleware](#middleware)
+  - [Installation](#installation)
+  - [Technologies Used](#technologies-used)
 
 ## Project Overview
 
@@ -27,37 +30,32 @@ The app includes user authentication and authorization to control access based o
 
 ## Features
 
-### 1. User Authentication & Authorization
+- [x] **User Authentication & Authorization**
+  - **JWT-based Authentication**: Users can register and log in.
+  - **Role Management**: Roles include Admin and Team Member, with protected routes based on roles.
+  - **Password Security**: Passwords are hashed using bcrypt.
 
-- **JWT-based Authentication**: Users can register and log in.
-- **Role Management**: Roles include Admin and Team Member, with protected routes based on roles.
-- **Password Security**: Passwords are hashed using bcrypt.
+- [x] **Teams and Projects**
+  - Users can create or join teams.
+  - Teams contain multiple projects.
+  - Projects have tasks that can be assigned to team members.
 
-### 2. Teams and Projects
+- [x] **Task Management**
+  - CRUD operations for tasks.
+  - Assign tasks to specific team members.
+  - Set due dates, track progress (in-progress, completed), and leave comments.
 
-- Users can create or join teams.
-- Teams contain multiple projects.
-- Projects have tasks that can be assigned to team members.
+- [ ] **Notification System**
+  - Notifications for upcoming task deadlines and project updates.
 
-### 3. Task Management
-
-- CRUD operations for tasks.
-- Assign tasks to specific team members.
-- Set due dates, track progress (in-progress, completed), and leave comments.
-
-### 4. Notification System
-
-- Notifications for upcoming task deadlines and project updates.
-
-### 5. Testing
-
-- Unit tests for API endpoints and services.
-- Integration tests to ensure smooth operation across all components.
-- Mock Xata responses to simulate database interactions.
+- [x] **Testing**
+  - Unit tests for API endpoints and services.
+  - Integration tests to ensure smooth operation across all components.
+  - Mock Xata responses to simulate database interactions.
 
 ## Project Structure
 
-### Tables/Models:
+### Tables/Models
 
 - **User**: `{ id, name, email, password, role }`
 - **Team**: `{ id, name, description, adminId (foreign key to User) }`
@@ -65,7 +63,7 @@ The app includes user authentication and authorization to control access based o
 - **Task**: `{ id, description, status, dueDate, projectId (foreign key to Project), assignedToId (foreign key to User) }`
 - **Comment**: `{ id, content, taskId (foreign key to Task), userId (foreign key to User) }`
 
-### Routes:
+### Routes
 
 - **/auth/register**: Register a user (Admin or Team Member).
 - **/auth/login**: Login with JWT generation.
@@ -74,7 +72,7 @@ The app includes user authentication and authorization to control access based o
 - **/tasks**: CRUD for tasks, task assignment, status updates.
 - **/comments**: Add comments to tasks.
 
-### Controllers:
+### Controllers
 
 - **AuthController**: Handles registration, login, and JWT authentication.
 - **TeamController**: Manages team creation, joining, and leaving.
@@ -82,7 +80,7 @@ The app includes user authentication and authorization to control access based o
 - **TaskController**: CRUD for tasks, task assignment, filtering by status, and member.
 - **CommentController**: Handles adding/viewing comments.
 
-### Middleware:
+### Middleware
 
 - **JWT Authentication**: Protects routes.
 - **Role-based Access Control**: Admin can manage teams and projects.
