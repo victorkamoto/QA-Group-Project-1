@@ -1,4 +1,3 @@
-import { Cross1Icon } from "@radix-ui/react-icons";
 import {
   ArrowRight,
   ChevronLeft,
@@ -6,21 +5,30 @@ import {
   Loader2,
   Moon,
   SunMedium,
+  LucideProps,
+  LayoutDashboard,
+  FolderKanban,
+  User,
+  type Icon as LucideIcon,
+  Settings,
+  X,
 } from "lucide-react";
-import { type JSX, type SVGProps } from "react";
+
+export type Icon = typeof LucideIcon;
 
 export const Icons = {
-  close: Cross1Icon,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   spinner: Loader2,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   chevronLeft: ChevronLeft,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   arrowRight: ArrowRight,
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
-  hamburger: () => (
+  dashboard: LayoutDashboard,
+  projects: FolderKanban,
+  teams: User,
+  settings: Settings,
+  close: X,
+  hamburger: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -38,7 +46,7 @@ export const Icons = {
       <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
   ),
-  user: () => (
+  user: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"

@@ -41,7 +41,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
             )}
           </div>
         </div>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
         <DropdownMenuItem
           className="cursor-pointer"
           onSelect={(event: any) => {
