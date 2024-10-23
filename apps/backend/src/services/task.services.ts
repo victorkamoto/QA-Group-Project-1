@@ -171,6 +171,33 @@ export const fetchTaskByid = async (id: string) => {
 }
 
 /**
+ * Fetches tasks assigned to a specific user by their user ID.
+ *
+ * @param userId - The ID of the user whose tasks are to be fetched.
+ * @returns A promise that resolves to an object containing:
+ * - `code`: The HTTP status code.
+ * - `message`: A message indicating the result of the operation.
+ * - `details`: The list of tasks if successful, or an error message if an error occurs.
+ */
+export const fetchTaskByUserId = async (userId: string) => {
+    try {
+        const tasks = await xata.db.Task.filter({ assignedToId: userId }).getAll();
+
+        return {
+            code: 200,
+            message: 'Tasks found!',
+            details: tasks
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}
+
+/**
  * Updates a task with the given taskId and body.
  *
  * @param {string} taskId - The ID of the task to update.

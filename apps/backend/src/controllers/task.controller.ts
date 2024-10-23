@@ -5,6 +5,7 @@ import {
     createTask,
     fetchTasks,
     fetchTaskByid,
+    fetchTaskByUserId,
     updateTask,
     deleteTaskFromProject,
     updateTaskStatus
@@ -72,6 +73,26 @@ export const getTasks = async (req: Request, resp: Response) => {
 export const getTaskById = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await fetchTaskByid(req.params.id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Retrieves tasks assigned to a user.
+ *
+ * @param req - The request object containing the user ID in the parameters.
+ * @param resp - The response object used to send the status and JSON data.
+ *
+ * @returns A promise that resolves to a JSON response containing the tasks assigned to the user.
+ *
+ * @throws Will return a 500 status code and an error message if an exception occurs.
+ */
+export const getTasksByUserId = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await fetchTaskByUserId(req.params.id);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {
