@@ -237,7 +237,7 @@ export const updateTask = async (taskId: string, body: UpdateTask) => {
         }
         const notificationMessage = `'${result.description}' updated!`;
 
-        const assignedToId = task.assignedToId.toString()
+        const assignedToId = task.assignedToId.xata_id;
 
 
         const notificationResult = await createNotification(notificationMessage, assignedToId);
@@ -292,6 +292,29 @@ export const deleteTaskFromProject = async (taskId: string) => {
         }
 
         const result = await xata.db.Task.delete(taskId);
+
+        if (!result) {
+            return {
+                code: 400,
+                message: 'Error updating task!',
+                details: 'Task was not updated!'
+            }
+        }
+
+        const notificationMessage = `'${result.description}' deleted!`;
+
+        const assignedToId = task.assignedToId.xata_id;
+
+
+        const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
 
         return {
             code: 200,
