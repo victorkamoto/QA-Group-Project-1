@@ -1,5 +1,10 @@
 import { Icons } from "../components/icons";
 
+export type ToastRes = {
+  status: number;
+  message: string;
+};
+
 export type User = {
   name: string;
   email: string;
