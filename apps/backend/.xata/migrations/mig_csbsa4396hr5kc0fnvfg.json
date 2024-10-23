@@ -1,0 +1,27 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csbsa4396hr5kc0fnvfg",
+    "operations": [
+      {
+        "add_column": {
+          "up": "''",
+          "table": "Task",
+          "column": {
+            "pk": false,
+            "name": "description",
+            "type": "text",
+            "unique": true,
+            "comment": "",
+            "nullable": false
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csbsa4396hr5kc0fnvfg",
+  "parent": "mig_csbs9oolshq3u7sj5icg",
+  "schema": "public",
+  "startedAt": "2024-10-22T15:30:24.815681Z"
+}

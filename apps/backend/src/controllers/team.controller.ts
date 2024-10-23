@@ -7,7 +7,8 @@ import {
     fetchTeamByid,
     updateTeam,
     joinUserToTeam,
-    removeUserFromTeam
+    removeUserFromTeam,
+    deleteTeamFromStorage
 } from "../services/team.services";
 
 /**
@@ -148,3 +149,25 @@ export const removeMember = async (req: Request, resp: Response) => {
         resp.status(500).json({ error: error.toString() });
     }
 }
+
+/**
+ * Deletes a team based on the provided team ID.
+ *
+ * @param req - The request object containing the team ID in the parameters.
+ * @param resp - The response object used to send back the HTTP response.
+ *
+ * @returns A JSON response with the status code, message, and details of the deletion operation.
+ *
+ * @throws Will return a 500 status code and an error message if an exception occurs during the deletion process.
+ */
+export const deleteTeam = async (req: Request, resp: Response) => {
+    try {
+        const id: string = req.params.id;
+        const { code, message, details } = await deleteTeamFromStorage(id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
