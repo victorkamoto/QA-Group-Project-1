@@ -1,22 +1,67 @@
 import request from 'supertest';
-import app from '../../src/server';
+import app, { xata } from '../../src/server';
 import { create, login } from '../../src/controllers/auth.controller';
 
 describe('Auth Controller', () => {
   it('should create a new user successfully', async () => {
     const userData = {
       name: 'John Doe',
-      email: 'john.doe@example.com',
+      email: 'john.doe@examplwwt.com',
       password: 'securePassword123',
     };
     const response = await request(app).post('/users/register').send(userData);
+    console.log(response);
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty(
       'message',
-      'User created successfully'
+      'User created successfully!'
     );
   });
 
+  describe('Validate user registration data', () => {
+    describe('User registration', () => {
+      it('should return error if name is empty', async () => {
+        const userData = {
+          name: '',
+          email: 'jane.doe@example.com',
+          password: 'password',
+        };
+        const response = await request(app)
+          .post('/users/register')
+          .send(userData);
+        console.log(response);
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('errors');
+      });
+
+      it('should return error if email is empty', async () => {
+        const userData = {
+          name: 'Jane Doe',
+          email: '',
+          password: 'password',
+        };
+        const response = await request(app)
+          .post('/users/register')
+          .send(userData);
+        console.log(response);
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('errors');
+      });
+      it('should return error if password length is not between 8-72 characters', async () => {
+        const userData = {
+          name: 'Jane Doe',
+          email: 'jane.doe@example.com',
+          password: 'pass',
+        };
+        const response = await request(app)
+          .post('/users/register')
+          .send(userData);
+        console.log(response);
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('errors');
+      });
+    });
+  });
   it('should handle invalid request data and return error message', async () => {
     const userData = {
       name: 'John Doe',
@@ -29,7 +74,7 @@ describe('Auth Controller', () => {
 
   it('should login a user successfully', async () => {
     const userData = {
-      email: 'john.doe@example.com',
+      email: 'john.doe@examplwwt.com',
       password: 'securePassword123',
     };
     const response = await request(app).post('/users/login').send(userData);
@@ -43,10 +88,8 @@ describe('Auth Controller', () => {
       password: 'wrongPassword',
     };
     const response = await request(app).post('/users/login').send(userData);
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty(
-      'message',
-      'Invalid login credentials'
-    );
+    console.log(response);
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid credentials!');
   });
 });

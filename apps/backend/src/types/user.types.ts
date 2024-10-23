@@ -8,3 +8,4 @@ export type User = {
 
 export type NewUser = Omit<User, 'xata_id'>;
 export type LoginUser = Pick<User, 'email' | 'password'>
+export type UpdateUser = Partial<Omit<User, 'xata_id'>>;

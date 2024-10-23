@@ -1,10 +1,11 @@
-import { registerUser, loginUser } from "../services/auth.services";
+import { loginUser } from "../services/auth.services";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { createUser } from "../services/user.services";
 
 
 /**
- * Handles the creation of a new user.
+ * Handles the registration of a new user.
  * 
  * This function validates the incoming request, and if valid, attempts to register a new user.
  * If the request is invalid, it responds with a 400 status code and the validation errors.
@@ -16,7 +17,7 @@ import { validationResult } from "express-validator";
  * 
  * @returns A promise that resolves to the HTTP response.
  */
-export const create = async (req: Request, resp: Response) => {
+export const register = async (req: Request, resp: Response) => {
     try {
         const errors = validationResult(req);
 
@@ -24,7 +25,7 @@ export const create = async (req: Request, resp: Response) => {
             return resp.status(400).json({ errors: errors.array() });
         }
 
-        const { code, message, details } = await registerUser(req.body);
+        const { code, message, details } = await createUser(req.body);
 
         resp.status(code).json({ message, details });
 
