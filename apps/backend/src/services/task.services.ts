@@ -1,5 +1,5 @@
-import { decodeBase64 } from "bcryptjs";
 import { xata } from "../server";
+import { createNotification } from "./notification.services";
 import { NewTask, UpdateTask, isValidStatus } from "../types/task.types";
 
 /**
@@ -86,6 +86,18 @@ export const createTask = async (task: NewTask) => {
             dueDate: parsedDueDate.toISOString(),
             projectId, assignedToId
         });
+
+        const notificationMessage = `'${result.description}' has been assigned to you!`
+
+        const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
 
         return {
             code: 201,
