@@ -16,42 +16,47 @@ export const asyncHandler =
       Promise.resolve(fn(req, res, next)).catch(next);
     };
 
-const convertXataRecordToTask = (record: TaskRecord) => {
+const convertXataRecordToTask = (record: TaskRecord): Task => {
   return {
     xata_id: record.xata_id,
-    description: record.description,
-    dueDate: new Date(record.dueDate),
-    status: record.status as "in-progress" | "completed",
-    projectId: record.projectId,
-    assignedToId: record.assignedToId
-  }
-}
+    description: record.description ?? '',
+    dueDate: new Date(record.dueDate ?? ''),
+    status: record.status,
+    projectId: record.projectId?.toString() ?? '',
+    assignedToId: record.assignedToId?.toString() ?? ''
+  };
+};
 
-
+type TaskKey = keyof Task;
 
 export function getTaskDifferences(task1: TaskRecord, task2: TaskRecord): Partial<Task> {
   const differences: Partial<Task> = {};
-
+  
   const originalTask = convertXataRecordToTask(task1);
   const updatedTask = convertXataRecordToTask(task2);
 
-  // Loop through each key in the updatedTask
-  (Object.keys(updatedTask) as Array<keyof Task>).forEach(key => {
-    if (key === 'dueDate') {
-      // Handle Date comparison
-      if (originalTask[key].getTime() !== updatedTask[key].getTime()) {
-        differences[key] = updatedTask[key];
-      }
-    } else if (key === 'status') {
-      // Handle status comparison
-      if (originalTask[key] !== updatedTask[key]) {
-        differences[key] = updatedTask[key];
-      }
-    } else {
-      // Handle other string comparisons
-      if (originalTask[key] !== updatedTask[key]) {
-        differences[key] = updatedTask[key];
-      }
+  (Object.keys(updatedTask) as TaskKey[]).forEach(key => {
+    switch(key) {
+      case 'dueDate':
+        if (originalTask.dueDate.getTime() !== updatedTask.dueDate.getTime()) {
+          differences.dueDate = updatedTask.dueDate;
+        }
+        break;
+        
+      case 'status':
+        if (originalTask.status !== updatedTask.status) {
+          differences.status = updatedTask.status;
+        }
+        break;
+        
+      case 'xata_id':
+      case 'description':
+      case 'projectId':
+      case 'assignedToId':
+        if (originalTask[key] !== updatedTask[key]) {
+          differences[key] = updatedTask[key];
+        }
+        break;
     }
   });
 

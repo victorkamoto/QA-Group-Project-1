@@ -201,6 +201,28 @@ export const updateTask = async (taskId: string, body: UpdateTask) => {
 
         const result = await xata.db.Task.update(taskId, body);
 
+        if (!result) {
+            return {
+                code: 400,
+                message: 'Error updating task!',
+                details: 'Task was not updated!'
+            }
+        }
+        const notificationMessage = `'${result.description}' updated!`;
+
+        const assignedToId = task.assignedToId.toString()
+
+
+        const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
+
         return {
             code: 200,
             message: 'Task updated successfully',
