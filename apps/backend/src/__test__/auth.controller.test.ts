@@ -29,7 +29,6 @@ describe('Auth Controller', () => {
         const response = await request(app)
           .post('/auth/register')
           .send(userData);
-        console.log(response);
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('errors');
       });
@@ -43,7 +42,6 @@ describe('Auth Controller', () => {
         const response = await request(app)
           .post('/auth/register')
           .send(userData);
-        console.log(response);
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('errors');
       });
@@ -56,7 +54,7 @@ describe('Auth Controller', () => {
         const response = await request(app)
           .post('/auth/register')
           .send(userData);
-        console.log(response);
+        // console.log(response);
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('errors');
       });
@@ -88,7 +86,6 @@ describe('Auth Controller', () => {
       password: 'wrongPassword',
     };
     const response = await request(app).post('/auth/login').send(userData);
-    console.log(response);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('message', 'Invalid credentials!');
   });
