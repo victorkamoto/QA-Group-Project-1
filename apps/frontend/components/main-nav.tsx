@@ -70,7 +70,7 @@ export function MainNav({ items, children }: MainNavProps) {
                         </NavigationMenuLink>
                       </Link>
                     </NavigationMenuItem>
-                  ),
+                  )
                 )}
               </NavigationMenuList>
             </NavigationMenu>
