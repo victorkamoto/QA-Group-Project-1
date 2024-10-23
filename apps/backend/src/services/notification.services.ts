@@ -36,3 +36,21 @@ export const createNotification = async (message: string, userId: string) => {
         }
     }
 }
+
+export const fetchAllUserNotifications = async (userId: string) => {
+    try {
+        const notifications = await xata.db.Notification.filter({ userId }).getAll();
+
+        return {
+            code: 200,
+            message: 'Notifications fetched successfully!',
+            details: notifications
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Server error!',
+            details: error.toString()
+        }
+    }
+}
