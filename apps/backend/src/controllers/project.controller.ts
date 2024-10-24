@@ -5,8 +5,10 @@ import {
     fetchProjects,
     fetchProjectById,
     updateProject,
-    deleteProjectFromStorage
+    deleteProjectFromStorage,
+    fetchProjectsByTeamId
 } from "../services/project.services";
+import exp from "constants";
 
 /**
  * Creates a new project.
@@ -71,6 +73,22 @@ export const getProjects = async (req: Request, resp: Response) => {
 export const getProjectById = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await fetchProjectById(req.params.id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+export const getProjectsByTeamId = async (req: Request, resp: Response) => {
+    try {
+        const teamId = req.query.teamId?.toString();
+
+        if (!teamId) {
+            return resp.status(400).json({ message: 'teamId is required!' });
+        }
+
+        const { code, message, details } = await fetchProjectsByTeamId(teamId);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {

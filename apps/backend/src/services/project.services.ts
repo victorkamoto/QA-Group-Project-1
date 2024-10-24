@@ -116,6 +116,32 @@ export const fetchProjectById = async (teamId: string) => {
     }
 }
 
+export const fetchProjectsByTeamId = async (teamId: string) => {
+    try {
+        const projects = await xata.db.Project.filter({ teamId }).getAll();
+
+        if (projects.length === 0) {
+            return {
+                code: 404,
+                message: 'Projects not found!',
+                details: `No projects found for team with id ${teamId}`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Projects found!',
+            details: projects
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error fetching projects!',
+            details: error.toString()
+        }
+    }
+}
+
 /**
  * Updates a project with the given project ID and update data.
  *
