@@ -32,7 +32,7 @@ export function MainNav({ items, children }: MainNavProps) {
   return (
     <div className="flex grow gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <Image src={"logo.svg"} alt="logo" width={50} height={50} />
+        <Image src={"../logo.svg"} alt="logo" width={50} height={50} />
         <span className="text-xl">Task Manager</span>
       </Link>
       {items?.length ? (

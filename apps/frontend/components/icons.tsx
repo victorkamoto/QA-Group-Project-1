@@ -12,6 +12,7 @@ import {
   type Icon as LucideIcon,
   Settings,
   X,
+  TriangleAlert,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -28,6 +29,7 @@ export const Icons = {
   teams: User,
   settings: Settings,
   close: X,
+  empty: TriangleAlert,
   hamburger: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

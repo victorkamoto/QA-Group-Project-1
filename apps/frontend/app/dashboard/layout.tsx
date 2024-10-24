@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { dashboardConfig } from "../../config/dashboard";
 import { MainNav } from "../../components/main-nav";
 import { DashboardNav } from "../../components/nav";
-import { SiteFooter } from "../../components/site-footer";
+import { DashFooter } from "../../components/dash-footer";
 import { UserAccountNav } from "../../components/user-account-nav";
 import React from "react";
 
@@ -48,7 +48,7 @@ export default async function DashboardLayout({
           {children}
         </main>
       </div>
-      <SiteFooter className="border-t" />
+      <DashFooter className="border-t" />
     </div>
   );
 }

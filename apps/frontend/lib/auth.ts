@@ -1,3 +1,4 @@
+import { ApiRes } from "../types";
 import client from "./axiosInstance";
 import * as jose from "jose";
 
@@ -15,12 +16,7 @@ type DecodedJwt = {
 
 type Jwt = DecodedJwt | null;
 
-type AuthRes = {
-  status: number;
-  message: string;
-};
-
-export const signup = async (data: IAuth): Promise<AuthRes> => {
+export const signup = async (data: IAuth): Promise<ApiRes> => {
   try {
     const response = await client.post(
       "/users/register",
@@ -29,7 +25,7 @@ export const signup = async (data: IAuth): Promise<AuthRes> => {
       },
       {
         headers: { auth: true },
-      },
+      }
     );
     return {
       status: response.status,
@@ -43,7 +39,7 @@ export const signup = async (data: IAuth): Promise<AuthRes> => {
   }
 };
 
-export const login = async (data: ILogin): Promise<AuthRes> => {
+export const login = async (data: ILogin): Promise<ApiRes> => {
   try {
     const response = await client.post(
       "/users/login",
@@ -52,7 +48,7 @@ export const login = async (data: ILogin): Promise<AuthRes> => {
       },
       {
         headers: { auth: true },
-      },
+      }
     );
 
     const { token } = response.data;
