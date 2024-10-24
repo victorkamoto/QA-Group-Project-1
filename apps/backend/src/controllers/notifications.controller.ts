@@ -10,7 +10,11 @@ import { fetchAllUserNotifications, fetchNotificationById } from "../services/no
  */
 export const getUserNotifications = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const userId = req.query.userId?.toString() || '';
+        const userId = req.query.userId?.toString();
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required!' });
+        }
 
         const { code, message, details } = await fetchAllUserNotifications(userId);
 
@@ -20,6 +24,15 @@ export const getUserNotifications = async (req: Request, res: Response): Promise
     }
 }
 
+/**
+ * Retrieves a notification by its ID.
+ *
+ * @param req - The request object containing the notification ID in the parameters.
+ * @param res - The response object used to send back the HTTP response.
+ * @returns A promise that resolves to a response containing the notification details or an error message.
+ *
+ * @throws Will return a 500 status code with an error message if an exception occurs.
+ */
 export const getNotificationById = async (req: Request, res: Response): Promise<Response> => {
     try {
         const notificationId = req.params.id;
@@ -31,3 +44,4 @@ export const getNotificationById = async (req: Request, res: Response): Promise<
         return res.status(500).json({ error: error.toString() });
     }
 }
+

@@ -48,6 +48,14 @@ export const fetchAllUserNotifications = async (userId: string) => {
     try {
         const notifications = await xata.db.Notification.filter({ userId }).getAll();
 
+        if (notifications.length === 0) {
+            return {
+                code: 404,
+                message: 'Notifications not found!',
+                details: `No notifications found for user with id ${userId}!`
+            }
+        }
+
         return {
             code: 200,
             message: 'Notifications fetched successfully!',
