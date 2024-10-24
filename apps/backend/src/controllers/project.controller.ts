@@ -5,8 +5,10 @@ import {
     fetchProjects,
     fetchProjectById,
     updateProject,
-    deleteProjectFromStorage
+    deleteProjectFromStorage,
+    fetchProjectsByTeamId
 } from "../services/project.services";
+import exp from "constants";
 
 /**
  * Creates a new project.
@@ -50,9 +52,14 @@ export const create = async (req: Request, resp: Response) => {
  */
 export const getProjects = async (req: Request, resp: Response) => {
     try {
-        const projects = await fetchProjects();
 
-        resp.json(projects);
+        if (req.query.teamId) {
+            return getProjectsByTeamId(req, resp);
+        }
+
+        const { code, message, details } = await fetchProjects();
+
+        resp.status(code).json({ message, details });
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }
@@ -71,6 +78,34 @@ export const getProjects = async (req: Request, resp: Response) => {
 export const getProjectById = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await fetchProjectById(req.params.id);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Retrieves projects associated with a specific team ID.
+ *
+ * @param req - The request object containing the team ID as a query parameter.
+ * @param resp - The response object used to send back the HTTP response.
+ * @returns A JSON response with the projects details or an error message.
+ *
+ * @remarks
+ * - If the `teamId` query parameter is missing, a 400 status code with an error message is returned.
+ * - If an error occurs during the process, a 500 status code with the error message is returned.
+ * - The function relies on `fetchProjectsByTeamId` to fetch the projects.
+ */
+const getProjectsByTeamId = async (req: Request, resp: Response) => {
+    try {
+        const teamId = req.query.teamId?.toString();
+
+        if (!teamId) {
+            return resp.status(400).json({ message: 'teamId is required!' });
+        }
+
+        const { code, message, details } = await fetchProjectsByTeamId(teamId);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {

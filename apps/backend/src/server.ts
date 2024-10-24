@@ -10,7 +10,8 @@ import teamRouter from "./routers/team.router";
 import projectRouter from "./routers/project.router";
 import taskRouter from "./routers/task.router";
 import commentsRouter from "./routers/comments.router";
-import notificationRouter from "./routers/notiications.router";
+import notificationRouter from "./routers/notifications.router";
+import teamMemberRouter from "./routers/teamMember.router";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use('/projects', projectRouter);
 app.use('/tasks', taskRouter);
 app.use('/comments', commentsRouter);
 app.use('/notifications', notificationRouter);
+app.use('/teamMembers', teamMemberRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);

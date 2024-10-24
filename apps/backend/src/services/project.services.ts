@@ -68,9 +68,25 @@ export const fetchProjects = async () => {
     try {
         const projects = await xata.db.Project.getAll();
 
-        return projects;
+        if (projects.length === 0) {
+            return {
+                code: 404,
+                message: 'Projects not found!',
+                details: 'No projects found!'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Projects found!',
+            details: projects
+        };
     } catch (error: any) {
-        return error.toString();
+        return {
+            code: 500,
+            message: 'Error fetching projects!',
+            details: error.toString()
+        }
     }
 }
 
@@ -111,6 +127,41 @@ export const fetchProjectById = async (teamId: string) => {
         return {
             code: 500,
             message: 'Error fetching project!',
+            details: error.toString()
+        }
+    }
+}
+
+/**
+ * Fetches projects associated with a specific team ID.
+ *
+ * @param teamId - The ID of the team whose projects are to be fetched.
+ * @returns An object containing the status code, message, and details.
+ *          If projects are found, the details will contain the projects.
+ *          If no projects are found, the details will contain a message indicating so.
+ *          If an error occurs, the details will contain the error message.
+ */
+export const fetchProjectsByTeamId = async (teamId: string) => {
+    try {
+        const projects = await xata.db.Project.filter({ teamId }).getAll();
+
+        if (projects.length === 0) {
+            return {
+                code: 404,
+                message: 'Projects not found!',
+                details: `No projects found for team with id ${teamId}`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Projects found!',
+            details: projects
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error fetching projects!',
             details: error.toString()
         }
     }
