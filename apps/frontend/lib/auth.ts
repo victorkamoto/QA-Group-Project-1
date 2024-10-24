@@ -1,4 +1,4 @@
-import { ToastRes } from "../types";
+import { ApiRes } from "../types";
 import client from "./axiosInstance";
 import * as jose from "jose";
 
@@ -16,7 +16,7 @@ type DecodedJwt = {
 
 type Jwt = DecodedJwt | null;
 
-export const signup = async (data: IAuth): Promise<ToastRes> => {
+export const signup = async (data: IAuth): Promise<ApiRes> => {
   try {
     const response = await client.post(
       "/users/register",
@@ -39,7 +39,7 @@ export const signup = async (data: IAuth): Promise<ToastRes> => {
   }
 };
 
-export const login = async (data: ILogin): Promise<ToastRes> => {
+export const login = async (data: ILogin): Promise<ApiRes> => {
   try {
     const response = await client.post(
       "/users/login",

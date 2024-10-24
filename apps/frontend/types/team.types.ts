@@ -1,5 +1,5 @@
 export type Team = {
-  id: string;
+  xata_id: string;
   name: string;
   description: string;
   adminId: string;

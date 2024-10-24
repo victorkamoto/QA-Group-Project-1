@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +12,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { toast } from "./ui/use-toast";
-import { Icons } from "./icons";
-import { createTeam, joinTeam } from "../lib/teams";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { toast } from "../ui/use-toast";
+import { Icons } from "../icons";
+import { store } from "../../store/store";
 
 const createTeamSchema = z.object({
   name: z.string().min(2, {
@@ -42,6 +42,8 @@ interface TeamDialogProps {
 
 export function TeamDialog({ type, buttonText }: TeamDialogProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const createTeam = store((state) => state.createTeam);
+  const joinTeam = store((state) => state.joinTeam);
 
   const {
     register,

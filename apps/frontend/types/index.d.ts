@@ -1,8 +1,9 @@
 import { Icons } from "../components/icons";
 
-export type ToastRes = {
+export type ApiRes = {
   status: number;
-  message: string;
+  message?: string;
+  data?: any;
 };
 
 export type User = {
