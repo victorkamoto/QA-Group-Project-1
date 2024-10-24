@@ -10,7 +10,7 @@ import teamRouter from "./routers/team.router";
 import projectRouter from "./routers/project.router";
 import taskRouter from "./routers/task.router";
 import commentsRouter from "./routers/comments.router";
-import notificationRouter from "./routers/notiications.router";
+import notificationRouter from "./routers/notifications.router";
 
 dotenv.config();
 
