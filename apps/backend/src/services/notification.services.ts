@@ -95,3 +95,55 @@ export const fetchNotificationById = async (notificationId: string) => {
         }
     }
 }
+
+/**
+ * Deletes a notification by its ID.
+ *
+ * @param {string} notificationId - The ID of the notification to delete.
+ * @returns {Promise<{code: number, message: string, details: any}>} - A promise that resolves to an object containing the status code, message, and details of the operation.
+ *
+ * @example
+ * const response = await deleteNotification('12345');
+ * if (response.code === 200) {
+ *     console.log('Notification deleted:', response.details);
+ * } else {
+ *     console.error('Error:', response.message);
+ * }
+ *
+ * @throws {Error} - Throws an error if there is a server issue.
+ */
+export const deleteNotification = async (notificationId: string) => {
+    try {
+        const notification = await xata.db.Notification.filter({ xata_id: notificationId }).getFirst();
+
+        if (!notification) {
+            return {
+                code: 404,
+                message: 'Notification not found!',
+                details: `Notification with id ${notificationId} not found!`
+            }
+        }
+
+        const result = await xata.db.Notification.delete({ xata_id: notificationId });
+
+        if (!result) {
+            return {
+                code: 404,
+                message: 'Notification not found!',
+                details: `Notification with id ${notificationId} not found!`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Notification deleted successfully!',
+            details: notification
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Server error!',
+            details: error.toString()
+        }
+    }
+}

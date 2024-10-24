@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { fetchAllUserNotifications, fetchNotificationById } from "../services/notification.services";
+import { fetchAllUserNotifications, fetchNotificationById, deleteNotification } from "../services/notification.services";
 
 /**
  * Fetches all notifications for a user.
@@ -13,7 +13,7 @@ export const getUserNotifications = async (req: Request, res: Response): Promise
         const userId = req.query.userId?.toString();
 
         if (!userId) {
-            return res.status(400).json({ message: 'User ID is required!' });
+            return res.status(400).json({ message: 'userId is required!' });
         }
 
         const { code, message, details } = await fetchAllUserNotifications(userId);
@@ -45,3 +45,14 @@ export const getNotificationById = async (req: Request, res: Response): Promise<
     }
 }
 
+export const deleteNotificationById = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const notificationId = req.params.id;
+
+        const { code, message, details } = await deleteNotification(notificationId);
+
+        return res.status(code).json({ message, details });
+    } catch (error: any) {
+        return res.status(500).json({ error: error.toString() });
+    }
+}
