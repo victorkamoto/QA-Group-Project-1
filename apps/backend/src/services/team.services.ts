@@ -35,6 +35,14 @@ export const createTeam = async (team: CreateTeam) => {
 
         const newTeam = await xata.db.Team.create({ name, description, adminId });
 
+        if (!newTeam) {
+            return {
+                code: 400,
+                message: 'Error creating team',
+                details: 'Could not create team'
+            }
+        }
+
         // join admin to TeamMember table
         const teamMember = await xata.db.TeamMember.create({
             teamId: newTeam.xata_id,

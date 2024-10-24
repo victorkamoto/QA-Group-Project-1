@@ -1,5 +1,5 @@
-import { decodeBase64 } from "bcryptjs";
 import { xata } from "../server";
+import { createNotification } from "./notification.services";
 import { NewTask, UpdateTask, isValidStatus } from "../types/task.types";
 
 /**
@@ -87,6 +87,18 @@ export const createTask = async (task: NewTask) => {
             projectId, assignedToId
         });
 
+        const notificationMessage = `'${result.description}' has been assigned to you!`
+
+        const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
+
         return {
             code: 201,
             message: 'Task created successfully',
@@ -159,6 +171,33 @@ export const fetchTaskByid = async (id: string) => {
 }
 
 /**
+ * Fetches tasks assigned to a specific user by their user ID.
+ *
+ * @param userId - The ID of the user whose tasks are to be fetched.
+ * @returns A promise that resolves to an object containing:
+ * - `code`: The HTTP status code.
+ * - `message`: A message indicating the result of the operation.
+ * - `details`: The list of tasks if successful, or an error message if an error occurs.
+ */
+export const fetchTaskByUserId = async (userId: string) => {
+    try {
+        const tasks = await xata.db.Task.filter({ assignedToId: userId }).getAll();
+
+        return {
+            code: 200,
+            message: 'Tasks found!',
+            details: tasks
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}
+
+/**
  * Updates a task with the given taskId and body.
  *
  * @param {string} taskId - The ID of the task to update.
@@ -188,6 +227,28 @@ export const updateTask = async (taskId: string, body: UpdateTask) => {
         }
 
         const result = await xata.db.Task.update(taskId, body);
+
+        if (!result) {
+            return {
+                code: 400,
+                message: 'Error updating task!',
+                details: 'Task was not updated!'
+            }
+        }
+        const notificationMessage = `'${result.description}' updated!`;
+
+        const assignedToId = task.assignedToId.xata_id;
+
+
+        const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
 
         return {
             code: 200,
@@ -231,6 +292,29 @@ export const deleteTaskFromProject = async (taskId: string) => {
         }
 
         const result = await xata.db.Task.delete(taskId);
+
+        if (!result) {
+            return {
+                code: 400,
+                message: 'Error updating task!',
+                details: 'Task was not updated!'
+            }
+        }
+
+        const notificationMessage = `'${result.description}' deleted!`;
+
+        const assignedToId = task.assignedToId.xata_id;
+
+
+        const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
 
         return {
             code: 200,

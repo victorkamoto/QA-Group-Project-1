@@ -1,0 +1,27 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csce4emk0a6tb3s70fk0",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Notification",
+          "column": {
+            "pk": false,
+            "name": "isRead",
+            "type": "bool",
+            "unique": false,
+            "comment": "",
+            "default": "'false'",
+            "nullable": false
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csce4emk0a6tb3s70fk0",
+  "parent": "mig_csce446k0a6tb3s70fd0",
+  "schema": "public",
+  "startedAt": "2024-10-23T11:47:06.786312Z"
+}

@@ -1,0 +1,20 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_csce446k0a6tb3s70fd0",
+    "operations": [
+      {
+        "alter_column": {
+          "name": "userId",
+          "table": "Notification",
+          "column": "assigneeId"
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_csce446k0a6tb3s70fd0",
+  "parent": "mig_csce3qek0a6tb3s70fb0",
+  "schema": "public",
+  "startedAt": "2024-10-23T11:46:25.420716Z"
+}

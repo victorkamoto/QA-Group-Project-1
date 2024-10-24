@@ -101,6 +101,82 @@ const tables = [
     ],
   },
   {
+    name: "Notification",
+    checkConstraints: {
+      Notification_xata_id_length_xata_id: {
+        name: "Notification_xata_id_length_xata_id",
+        columns: ["xata_id"],
+        definition: "CHECK ((length(xata_id) < 256))",
+      },
+    },
+    foreignKeys: {},
+    primaryKey: [],
+    uniqueConstraints: {
+      _pgroll_new_Notification_xata_id_key: {
+        name: "_pgroll_new_Notification_xata_id_key",
+        columns: ["xata_id"],
+      },
+    },
+    columns: [
+      {
+        name: "isRead",
+        type: "bool",
+        notNull: true,
+        unique: false,
+        defaultValue: "false",
+        comment: "",
+      },
+      {
+        name: "message",
+        type: "text",
+        notNull: true,
+        unique: false,
+        defaultValue: null,
+        comment: "",
+      },
+      {
+        name: "userId",
+        type: "text",
+        notNull: true,
+        unique: false,
+        defaultValue: null,
+        comment: "",
+      },
+      {
+        name: "xata_createdat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_id",
+        type: "text",
+        notNull: true,
+        unique: true,
+        defaultValue: "('rec_'::text || (xata_private.xid())::text)",
+        comment: "",
+      },
+      {
+        name: "xata_updatedat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_version",
+        type: "int",
+        notNull: true,
+        unique: false,
+        defaultValue: "0",
+        comment: "",
+      },
+    ],
+  },
+  {
     name: "Project",
     checkConstraints: {
       Project_xata_id_length_xata_id: {
@@ -572,6 +648,9 @@ export type InferredTypes = SchemaInference<SchemaTables>;
 export type Comment = InferredTypes["Comment"];
 export type CommentRecord = Comment & XataRecord;
 
+export type Notification = InferredTypes["Notification"];
+export type NotificationRecord = Notification & XataRecord;
+
 export type Project = InferredTypes["Project"];
 export type ProjectRecord = Project & XataRecord;
 
@@ -589,6 +668,7 @@ export type UserRecord = User & XataRecord;
 
 export type DatabaseSchema = {
   Comment: CommentRecord;
+  Notification: NotificationRecord;
   Project: ProjectRecord;
   Task: TaskRecord;
   Team: TeamRecord;
