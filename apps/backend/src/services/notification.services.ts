@@ -37,6 +37,13 @@ export const createNotification = async (message: string, userId: string) => {
     }
 }
 
+/**
+ * Fetches all notifications for a specific user.
+ *
+ * @param userId - The ID of the user whose notifications are to be fetched.
+ * @returns An object containing the status code, a message, and the details of the notifications or an error message.
+ * @throws Will return a server error message if the operation fails.
+ */
 export const fetchAllUserNotifications = async (userId: string) => {
     try {
         const notifications = await xata.db.Notification.filter({ userId }).getAll();
