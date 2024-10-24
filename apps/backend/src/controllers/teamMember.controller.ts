@@ -13,6 +13,11 @@ import { fetchAllTeamMembers, fetchTeamMemberById } from "../services/teamMember
  */
 export const getAllTeamMembers = async (req: Request, res: Response): Promise<Response> => {
     try {
+
+        if (req.query.memberId) {
+            return getTeamMemberById(req, res);
+        }
+
         const { code, message, details } = await fetchAllTeamMembers();
 
         return res.status(code).json({ message, details });

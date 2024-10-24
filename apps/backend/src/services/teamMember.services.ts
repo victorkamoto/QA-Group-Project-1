@@ -46,7 +46,7 @@ export const fetchAllTeamMembers = async () => {
  */
 export const fetchTeamMemberById = async (id: string) => {
     try {
-        const teamMember = await xata.db.TeamMember.filter({ userId: id }).getFirst();
+        const teamMember = await xata.db.TeamMember.filter({ userId: id }).getAll();
 
         if (!teamMember) {
             return {
