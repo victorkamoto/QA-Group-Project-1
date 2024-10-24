@@ -61,3 +61,29 @@ export const fetchAllUserNotifications = async (userId: string) => {
         }
     }
 }
+
+export const fetchNotificationById = async (notificationId: string) => {
+    try {
+        const notification = await xata.db.Notification.filter({ xata_id: notificationId }).getFirst();
+
+        if (!notification) {
+            return {
+                code: 404,
+                message: 'Notification not found!',
+                details: `Notification with id ${notificationId} not found!`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Notification fetched successfully!',
+            details: notification
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Server error!',
+            details: error.toString()
+        }
+    }
+}
