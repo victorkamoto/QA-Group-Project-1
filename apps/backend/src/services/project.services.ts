@@ -116,6 +116,15 @@ export const fetchProjectById = async (teamId: string) => {
     }
 }
 
+/**
+ * Fetches projects associated with a specific team ID.
+ *
+ * @param teamId - The ID of the team whose projects are to be fetched.
+ * @returns An object containing the status code, message, and details.
+ *          If projects are found, the details will contain the projects.
+ *          If no projects are found, the details will contain a message indicating so.
+ *          If an error occurs, the details will contain the error message.
+ */
 export const fetchProjectsByTeamId = async (teamId: string) => {
     try {
         const projects = await xata.db.Project.filter({ teamId }).getAll();

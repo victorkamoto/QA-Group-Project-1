@@ -80,6 +80,18 @@ export const getProjectById = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * Retrieves projects associated with a specific team ID.
+ *
+ * @param req - The request object containing the team ID as a query parameter.
+ * @param resp - The response object used to send back the HTTP response.
+ * @returns A JSON response with the projects details or an error message.
+ *
+ * @remarks
+ * - If the `teamId` query parameter is missing, a 400 status code with an error message is returned.
+ * - If an error occurs during the process, a 500 status code with the error message is returned.
+ * - The function relies on `fetchProjectsByTeamId` to fetch the projects.
+ */
 export const getProjectsByTeamId = async (req: Request, resp: Response) => {
     try {
         const teamId = req.query.teamId?.toString();
