@@ -52,9 +52,14 @@ export const create = async (req: Request, resp: Response) => {
  */
 export const getProjects = async (req: Request, resp: Response) => {
     try {
-        const projects = await fetchProjects();
 
-        resp.json(projects);
+        if (req.query.teamId) {
+            return getProjectsByTeamId(req, resp);
+        }
+
+        const { code, message, details } = await fetchProjects();
+
+        resp.status(code).json({ message, details });
     } catch (error: any) {
         resp.status(500).json({ error: error.toString() });
     }
@@ -92,7 +97,7 @@ export const getProjectById = async (req: Request, resp: Response) => {
  * - If an error occurs during the process, a 500 status code with the error message is returned.
  * - The function relies on `fetchProjectsByTeamId` to fetch the projects.
  */
-export const getProjectsByTeamId = async (req: Request, resp: Response) => {
+const getProjectsByTeamId = async (req: Request, resp: Response) => {
     try {
         const teamId = req.query.teamId?.toString();
 

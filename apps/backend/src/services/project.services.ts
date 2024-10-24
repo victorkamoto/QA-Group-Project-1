@@ -68,9 +68,25 @@ export const fetchProjects = async () => {
     try {
         const projects = await xata.db.Project.getAll();
 
-        return projects;
+        if (projects.length === 0) {
+            return {
+                code: 404,
+                message: 'Projects not found!',
+                details: 'No projects found!'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Projects found!',
+            details: projects
+        };
     } catch (error: any) {
-        return error.toString();
+        return {
+            code: 500,
+            message: 'Error fetching projects!',
+            details: error.toString()
+        }
     }
 }
 
