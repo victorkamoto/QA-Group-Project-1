@@ -8,6 +8,13 @@ import {
   joinTeam,
   updateTeam,
 } from "../lib/teams";
+import { CreateProject, Project, UpdateProject } from "../types/project.types";
+import {
+  createProject,
+  deleteProject,
+  getProjects,
+  updateProject,
+} from "../lib/projects";
 
 interface StoreState {
   //   user: User;
@@ -19,6 +26,12 @@ interface StoreState {
   createTeam: (team: CreateTeam) => Promise<ApiRes>;
   updateTeam: (id: string, team: UpdateTeam) => Promise<ApiRes>;
   deleteTeam: (id: string) => Promise<ApiRes>;
+
+  projects: Project[];
+  getProjects: () => Promise<void>;
+  createProject: (project: CreateProject) => Promise<ApiRes>;
+  updateProject: (id: string, team: UpdateProject) => Promise<ApiRes>;
+  deleteProject: (id: string) => Promise<ApiRes>;
 }
 
 export const store = create<StoreState>()((set) => ({
@@ -55,6 +68,35 @@ export const store = create<StoreState>()((set) => ({
     set((state) => {
       const teams = state.teams.filter((t) => t.xata_id != id);
       return { teams: [...teams] };
+    });
+    return { status };
+  },
+
+  projects: [],
+  getProjects: async () => {
+    const { data } = await getProjects();
+    set({ projects: [...data] });
+  },
+  createProject: async (project) => {
+    const { status, data } = await createProject(project);
+    set((state) => {
+      return { projects: [...state.projects, data] };
+    });
+    return { status };
+  },
+  updateProject: async (id, project) => {
+    const { status, data } = await updateProject(id, project);
+    set((state) => {
+      const projects = state.projects.filter((p) => p.xata_id != id);
+      return { projects: [...projects, data] };
+    });
+    return { status };
+  },
+  deleteProject: async (id) => {
+    const { status } = await deleteProject(id);
+    set((state) => {
+      const projects = state.projects.filter((p) => p.xata_id != id);
+      return { projects: [...projects] };
     });
     return { status };
   },
