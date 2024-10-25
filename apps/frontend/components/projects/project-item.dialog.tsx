@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Pencil, Trash2, FolderGit2 } from "lucide-react";
+import { Pencil, Trash2, FolderGit2, ClipboardList } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,35 +20,38 @@ import { Input } from "../ui/input";
 import { Icons } from "../icons";
 import { store } from "../../store/store";
 import { Project } from "../../types/project.types";
+import { updateProject } from "../../lib/projects";
+import { Task } from "../../types/task.types";
+import { Team } from "../../types/team.types";
 
-const updateTeamSchema = z.object({
+const updateProjectSchema = z.object({
   name: z.string().min(2, {
-    message: "Team name must be at least 2 characters.",
+    message: "Project name must be at least 2 characters.",
   }),
-  description: z.string(),
+  teamId: z.string(),
 });
 
-type FormData = z.infer<typeof updateTeamSchema>;
+type FormData = z.infer<typeof updateProjectSchema>;
 
-interface TeamItemDialogProps {
+interface ProjectItemDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  teamName: string;
-  teamDescription: string;
-  projects: Project[];
-  teamId: string;
+  projectName: string;
+  projectId: string;
+  tasks: Partial<Task[]>;
+  team: Partial<Team>;
 }
 
-export default function TeamItemDialog({
+export default function ProjectItemDialog({
   isOpen = false,
   onClose,
-  teamName,
-  teamDescription,
-  projects,
-  teamId,
-}: TeamItemDialogProps) {
-  const updateTeam = store((state) => state.updateTeam);
-  const deleteTeam = store((state) => state.deleteTeam);
+  projectName,
+  team: { xata_id: teamId, name: teamName },
+  tasks,
+  projectId,
+}: ProjectItemDialogProps) {
+  const updateProject = store((state) => state.updateProject);
+  const deleteProject = store((state) => state.deleteProject);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const {
@@ -57,38 +60,40 @@ export default function TeamItemDialog({
     formState: { errors },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(updateTeamSchema),
+    resolver: zodResolver(updateProjectSchema),
     defaultValues: {
-      name: teamName,
-      description: teamDescription,
+      name: projectName,
+      teamId: teamId,
     },
   });
 
   useEffect(() => {
     if (isEditMode) {
       reset({
-        name: teamName,
-        description: teamDescription,
+        name: projectName,
+        teamId: teamId,
       });
     }
-  }, [isEditMode, teamName, teamDescription, reset]);
+  }, [isEditMode, projectName, teamId, reset]);
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
-    const { name, description } = data;
-    const adminId = JSON.parse(localStorage.getItem("auth") || "").userId;
-    const response = await updateTeam(teamId, { name, description, adminId });
+    const { name, teamId } = data;
+    const response = await updateProject(projectId, {
+      name,
+      teamId,
+    });
     setIsLoading(false);
     if (response?.status !== 200) {
       return toast({
         title: "Something went wrong.",
-        description: `Failed to update team. Please try again.`,
+        description: `Failed to update project. Please try again.`,
         variant: "destructive",
       });
     }
 
     toast({
-      description: `Successfully updated the team.`,
+      description: `Successfully updated the project.`,
     });
   }
 
@@ -98,7 +103,7 @@ export default function TeamItemDialog({
 
   const handleDelete = async () => {
     setIsLoading(true);
-    const response = await deleteTeam(teamId);
+    const response = await deleteProject(projectId);
     setIsLoading(false);
 
     if (response?.status !== 200) {
@@ -134,19 +139,24 @@ export default function TeamItemDialog({
         {!isEditMode ? (
           <>
             <DialogHeader>
-              <DialogTitle>{teamName}</DialogTitle>
-              <DialogDescription>{teamDescription}</DialogDescription>
+              <DialogTitle>{projectName}</DialogTitle>
+              <DialogDescription>
+                <div className="flex items-center space-x-2">
+                  <ClipboardList className="h-5 w-5 text-muted-foreground" />
+                  <span className="text-sm font-medium">{teamName}</span>
+                </div>
+              </DialogDescription>
             </DialogHeader>
             <ScrollArea className="h-[200px] w-full rounded-md border p-4">
-              <h4 className="mb-4 text-sm font-medium">Projects</h4>
+              <h4 className="mb-4 text-sm font-medium">Tasks</h4>
               <ul className="space-y-2">
-                {projects.map((project) => (
+                {tasks.map((task) => (
                   <li
-                    key={project.xata_id}
+                    key={task?.xata_id}
                     className="flex items-center space-x-2"
                   >
                     <FolderGit2 className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{project.name}</span>
+                    <span className="text-sm">{task?.description}</span>
                   </li>
                 ))}
               </ul>
@@ -155,16 +165,25 @@ export default function TeamItemDialog({
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>{teamName}</DialogTitle>
+              <DialogTitle>{projectName}</DialogTitle>
             </DialogHeader>
             <form>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Input
+                    id="description"
+                    className="col-span-4"
+                    placeholder="Project ID"
+                    defaultValue={teamId}
+                    {...register("teamId")}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Input
                     id="name"
                     className="col-span-4"
-                    placeholder="Team Name"
-                    defaultValue={teamName}
+                    placeholder="Project Name"
+                    defaultValue={projectName}
                     {...register("name")}
                   />
                 </div>
@@ -173,15 +192,6 @@ export default function TeamItemDialog({
                     {errors.name.message}
                   </p>
                 )}
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Input
-                    id="description"
-                    className="col-span-4"
-                    placeholder="Team Description"
-                    defaultValue={teamDescription}
-                    {...register("description")}
-                  />
-                </div>
               </div>
             </form>
           </>
