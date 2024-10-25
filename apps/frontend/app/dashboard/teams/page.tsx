@@ -53,9 +53,9 @@ export default async function TeamsPage() {
                     handleTeamClick({
                       ...team,
                       projects: [
-                        { id: "1", name: "Website Redesign" },
-                        { id: "2", name: "Mobile App UI" },
-                        { id: "3", name: "Brand Guidelines" },
+                        { xata_id: "1", name: "Website Redesign" },
+                        { xata_id: "2", name: "Mobile App UI" },
+                        { xata_id: "3", name: "Brand Guidelines" },
                       ],
                     })
                   }

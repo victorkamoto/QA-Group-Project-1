@@ -5,5 +5,5 @@ export type Team = {
   adminId: string;
 };
 
-export type CreateTeam = Omit<Team, "id">;
-export type UpdateTeam = Partial<CreateTeam>;
+export type CreateTeam = Omit<Team, "xata_id">;
+export type UpdateTeam = Partial<Omit<CreateTeam, "xata_id">>;

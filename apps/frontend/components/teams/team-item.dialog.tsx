@@ -19,11 +19,7 @@ import { toast } from "../ui/use-toast";
 import { Input } from "../ui/input";
 import { Icons } from "../icons";
 import { store } from "../../store/store";
-
-interface Project {
-  id: string;
-  name: string;
-}
+import { Project } from "../../types/project.types";
 
 const updateTeamSchema = z.object({
   name: z.string().min(2, {
@@ -145,7 +141,10 @@ export default function TeamItemDialog({
               <h4 className="mb-4 text-sm font-medium">Projects</h4>
               <ul className="space-y-2">
                 {projects.map((project) => (
-                  <li key={project.id} className="flex items-center space-x-2">
+                  <li
+                    key={project.xata_id}
+                    className="flex items-center space-x-2"
+                  >
                     <FolderGit2 className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">{project.name}</span>
                   </li>
