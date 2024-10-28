@@ -6,7 +6,7 @@ export const createTaskSchema = checkSchema({
             errorMessage: 'description must be a string!'
         },
         isLength: {
-            options: {min: 8},
+            options: { min: 8 },
             errorMessage: 'description must be atleast 8 characters long!'
         },
         escape: true
@@ -16,8 +16,8 @@ export const createTaskSchema = checkSchema({
             errorMessage: 'status must be a string!'
         },
         isLength: {
-            options: {min: 9, max: 11},
-            errorMessage: 'status must be string of 9-11 character long!'
+            options: { min: 5, max: 11 },
+            errorMessage: 'status must be string of 5-11 character long!'
         },
         escape: true
     },
