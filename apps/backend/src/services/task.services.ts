@@ -124,7 +124,7 @@ export const createTask = async (task: NewTask) => {
  */
 export const fetchTasks = async () => {
     try {
-        const tasks = await xata.db.Task.getAll();
+        const tasks = await xata.db.Task.sort('xata_createdat', 'desc').getAll();
 
         return tasks;
     } catch (error: any) {
