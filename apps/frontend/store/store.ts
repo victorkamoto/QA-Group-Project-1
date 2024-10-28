@@ -15,6 +15,8 @@ import {
   getProjects,
   updateProject,
 } from "../lib/projects";
+import { Column, CreateTask, Task, UpdateTask } from "../types/task.types";
+import { createTask, deleteTask, getTasks, updateTask } from "../lib/tasks";
 
 interface StoreState {
   //   user: User;
@@ -32,6 +34,15 @@ interface StoreState {
   createProject: (project: CreateProject) => Promise<ApiRes>;
   updateProject: (id: string, team: UpdateProject) => Promise<ApiRes>;
   deleteProject: (id: string) => Promise<ApiRes>;
+
+  tasks: Task[];
+  getTasks: () => Promise<void>;
+  createTask: (task: CreateTask) => Promise<ApiRes>;
+  updateTask: (id: string, task: UpdateTask) => Promise<ApiRes>;
+  deleteTask: (id: string) => Promise<ApiRes>;
+
+  kanban: Column[];
+  setKanban: (columns: Column[]) => void;
 }
 
 export const store = create<StoreState>()((set) => ({
@@ -97,6 +108,59 @@ export const store = create<StoreState>()((set) => ({
     set((state) => {
       const projects = state.projects.filter((p) => p.xata_id != id);
       return { projects: [...projects] };
+    });
+    return { status };
+  },
+
+  kanban: [
+    {
+      id: "backlog",
+      title: "Backlog",
+      tasks: [],
+    },
+    {
+      id: "in-progress",
+      title: "In Progress",
+      tasks: [],
+    },
+    {
+      id: "review",
+      title: "Review",
+      tasks: [],
+    },
+    {
+      id: "completed",
+      title: "Completed",
+      tasks: [],
+    },
+  ],
+  setKanban: (columns) => set({ kanban: columns }),
+
+  tasks: [],
+  getTasks: async () => {
+    const { data } = await getTasks();
+    set({ tasks: [...data] });
+  },
+  createTask: async (task) => {
+    const { status, data } = await createTask(task);
+    set((state) => {
+      return { tasks: [...state.tasks, data] };
+    });
+    return { status };
+  },
+  updateTask: async (id, task) => {
+    const { status, data } = await updateTask(id, task);
+    set((state) => {
+      const tasks = state.tasks.filter((t) => t.xata_id != id);
+      return { tasks: [...tasks, data] };
+    });
+    return { status };
+  },
+  deleteTask: async (id) => {
+    const { status } = await deleteTask(id);
+    set((state) => {
+      const tasks = state.tasks.filter((t) => t.xata_id != id);
+      return { tasks: [...tasks] };
     });
     return { status };
   },
