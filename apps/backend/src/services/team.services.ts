@@ -310,3 +310,47 @@ export const deleteTeamFromStorage = async (id: string) => {
         }
     }
 }
+
+/**
+ * Fetches teams associated with a given user ID.
+ *
+ * @param userId - The ID of the user whose teams are to be fetched.
+ * @returns A promise that resolves to an object containing:
+ * - `code`: The status code of the operation.
+ * - `message`: A message describing the result of the operation.
+ * - `details`: An array of teams if successful, or an error message if not.
+ *
+ * @throws Will return an object with a 500 status code and error details if an exception occurs during the operation.
+ */
+export const fetchTeamsByUserId = async (userId: string) => {
+    try {
+        const teamMembers = await xata.db.TeamMember.filter({ userId }).getAll();
+
+        if (teamMembers.length === 0) {
+            return {
+                code: 400,
+                message: 'Error fetching data!',
+                details: `User with id ${userId} is not a member of any team!`
+            }
+        }
+
+        const teamIds = teamMembers.map((member) => member.teamId.xata_id);
+
+        const teams = await xata.db.Team.filter({
+            xata_id: { $any: teamIds },
+        }).getAll();
+
+        return {
+            code: 200,
+            message: 'Teams fetched successfully',
+            details: teams
+        }
+
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error fetching teams data!',
+            details: error.toString()
+        }
+    }
+}

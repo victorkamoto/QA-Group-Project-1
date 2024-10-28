@@ -5,6 +5,7 @@ import {
     createTeam,
     fetchTeams,
     fetchTeamByid,
+    fetchTeamsByUserId,
     updateTeam,
     joinUserToTeam,
     removeUserFromTeam,
@@ -171,3 +172,22 @@ export const deleteTeam = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * Retrieves the team information associated with a specific user ID.
+ *
+ * @param req - The request object containing the user ID in the parameters.
+ * @param resp - The response object used to send back the HTTP response.
+ *
+ * @returns A JSON response with the team details if successful, or an error message if an error occurs.
+ *
+ * @throws Will return a 500 status code with an error message if an exception is thrown during the process.
+ */
+export const getTeamByUserId = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await fetchTeamsByUserId(req.params.userId);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
