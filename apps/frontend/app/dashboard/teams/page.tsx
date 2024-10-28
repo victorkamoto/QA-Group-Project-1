@@ -14,7 +14,7 @@ import { store } from "../../../store/store";
 import TeamItemDialog from "../../../components/teams/team-item.dialog";
 
 export default async function TeamsPage() {
-  const teams = store((state) => state.tasks);
+  const teams = store((state) => state.teams);
   const getTeams = store((state) => state.getTeams);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<any>();

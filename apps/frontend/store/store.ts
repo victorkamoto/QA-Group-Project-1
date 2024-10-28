@@ -49,36 +49,36 @@ export const store = create<StoreState>()((set) => ({
   teams: [],
   getTeams: async () => {
     const { data } = await getTeams();
-    set({ tasks: [...data] });
+    set({ teams: [...data] });
   },
   joinTeam: async (teamId, userId) => {
     const { status, data } = await joinTeam(teamId, userId);
     set((state) => {
-      const teams = state.tasks.filter((t) => t.xata_id != teamId);
-      return { tasks: [...teams, data] };
+      const teams = state.teams.filter((t) => t.xata_id != teamId);
+      return { teams: [...teams, data] };
     });
     return { status };
   },
   createTeam: async (team) => {
     const { status, data } = await createTeam(team);
     set((state) => {
-      return { tasks: [...state.tasks, data] };
+      return { teams: [...state.teams, data] };
     });
     return { status };
   },
   updateTeam: async (id, team) => {
     const { status, data } = await updateTeam(id, team);
     set((state) => {
-      const teams = state.tasks.filter((t) => t.xata_id != id);
-      return { tasks: [...teams, data] };
+      const teams = state.teams.filter((t) => t.xata_id != id);
+      return { teams: [...teams, data] };
     });
     return { status };
   },
   deleteTeam: async (id) => {
     const { status } = await deleteTeam(id);
     set((state) => {
-      const teams = state.tasks.filter((t) => t.xata_id != id);
-      return { tasks: [...teams] };
+      const teams = state.teams.filter((t) => t.xata_id != id);
+      return { teams: [...teams] };
     });
     return { status };
   },
