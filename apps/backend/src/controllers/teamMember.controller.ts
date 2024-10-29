@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { fetchAllTeamMembers, fetchTeamMemberById } from "../services/teamMember.services";
+import {
+    fetchAllTeamMembers,
+    fetchTeamMemberById,
+    fetchTeamMembersByTeamId
+} from "../services/teamMember.services";
 
 
 /**
@@ -46,6 +50,32 @@ export const getTeamMemberById = async (req: Request, res: Response): Promise<Re
         }
 
         const { code, message, details } = await fetchTeamMemberById(teamMemberId);
+
+        return res.status(code).json({ message, details });
+    } catch (error: any) {
+        return res.status(500).json({ error: error.toString() });
+    }
+}
+
+/**
+ * Retrieves team members by team ID.
+ *
+ * @param req - The request object containing the team ID in the query parameters.
+ * @param res - The response object used to send back the appropriate HTTP response.
+ * @returns A JSON response with the team members' details or an error message.
+ *
+ * @throws Will return a 400 status code if the team ID is not provided.
+ * @throws Will return a 500 status code if an unexpected error occurs.
+ */
+export const getTeamMembersByTeamID = async (req: Request, res: Response) => {
+    try {
+        const teamId = req.query.teamId?.toString();
+
+        if (!teamId) {
+            return res.status(400).json({ message: 'teamId is required!' });
+        }
+
+        const { code, message, details } = await fetchTeamMemberById(teamId);
 
         return res.status(code).json({ message, details });
     } catch (error: any) {

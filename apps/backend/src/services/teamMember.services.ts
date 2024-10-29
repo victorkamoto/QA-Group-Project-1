@@ -69,3 +69,37 @@ export const fetchTeamMemberById = async (id: string) => {
         }
     }
 }
+
+/**
+ * Fetches team members by the given team ID.
+ *
+ * @param {string} teamId - The ID of the team to fetch members for.
+ * @returns {Promise<{code: number, message: string, details: any}>} - A promise that resolves to an object containing the status code, message, and details of the operation.
+ *
+ * @throws {Error} - Throws an error if there is an issue fetching the team members.
+ */
+export const fetchTeamMembersByTeamId = async (teamId: string) => {
+    try {
+        const teamMembers = await xata.db.TeamMember.filter({ teamId }).getAll();
+
+        if (teamMembers.length === 0) {
+            return {
+                code: 400,
+                message: 'Error fetching team member data!',
+                details: `Team with id ${teamId} does not exists!`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Team members fetched successfully!',
+            details: teamMembers
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Error fetching team member data!',
+            details: error.toString()
+        }
+    }
+}
