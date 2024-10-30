@@ -37,6 +37,32 @@ export const createNotification = async (message: string, userId: string) => {
     }
 }
 
+export const fetchAllNotifications = async () => {
+    try {
+        const notifications = await xata.db.Notification.getAll();
+
+        if (notifications.length === 0) {
+            return {
+                code: 404,
+                message: 'Notifications not found!',
+                details: 'No notifications found!'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Notifications fetched successfully!',
+            details: notifications
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Server error!',
+            details: error.toString()
+        }
+    }
+}
+
 /**
  * Fetches all notifications for a specific user.
  *
