@@ -37,6 +37,15 @@ export const createNotification = async (message: string, userId: string) => {
     }
 }
 
+/**
+ * Fetches all notifications from the database.
+ *
+ * @returns {Promise<{code: number, message: string, details: any}>} 
+ * An object containing the status code, message, and details of the operation.
+ * - If notifications are found, the status code is 200 and details contain the notifications.
+ * - If no notifications are found, the status code is 404 and details contain a not found message.
+ * - If there is a server error, the status code is 500 and details contain the error message.
+ */
 export const fetchAllNotifications = async () => {
     try {
         const notifications = await xata.db.Notification.getAll();
