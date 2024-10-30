@@ -13,6 +13,9 @@ import commentsRouter from "./routers/comments.router";
 import notificationRouter from "./routers/notifications.router";
 import teamMemberRouter from "./routers/teamMember.router";
 
+// import notification task to schedule
+import { createNotificationsJob } from "./utils/notifications.schedular";
+
 dotenv.config();
 
 export const xata = new XataClient({
@@ -22,13 +25,13 @@ export const xata = new XataClient({
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3500;
+
+createNotificationsJob.start();
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
-app.get("/hello", (req: Request, resp: Response) => {
-  resp.json({ msg: "Hello" });
-});
 
 app.use("/", userRouter);
 app.use('/teams', teamRouter);

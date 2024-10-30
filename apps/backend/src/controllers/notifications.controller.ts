@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { fetchAllUserNotifications, fetchNotificationById, deleteNotification } from "../services/notification.services";
+import {
+    fetchAllUserNotifications,
+    fetchNotificationById,
+    deleteNotification
+} from "../services/notification.services";
 
 /**
  * Fetches all notifications for a user.
@@ -45,6 +49,15 @@ export const getNotificationById = async (req: Request, res: Response): Promise<
     }
 }
 
+/**
+ * Deletes a notification by its ID.
+ *
+ * @param req - The request object containing the notification ID in the parameters.
+ * @param res - The response object used to send back the HTTP response.
+ * @returns A promise that resolves to the HTTP response with the status code, message, and details of the deletion operation.
+ *
+ * @throws Will return a 500 status code with an error message if an exception occurs during the deletion process.
+ */
 export const deleteNotificationById = async (req: Request, res: Response): Promise<Response> => {
     try {
         const notificationId = req.params.id;
