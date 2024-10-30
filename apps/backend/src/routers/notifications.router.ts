@@ -10,6 +10,7 @@ const notificationRouter = Router();
 
 notificationRouter.get('/:id', asyncHandler(getNotificationById));
 notificationRouter.get('/', asyncHandler(getUserNotifications));
+notificationRouter.get('/search', asyncHandler(getUserNotifications));
 notificationRouter.delete('/:id', asyncHandler(deleteNotificationById));
 
 export default notificationRouter;
