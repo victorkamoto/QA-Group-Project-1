@@ -124,7 +124,7 @@ export const createTask = async (task: NewTask) => {
  */
 export const fetchTasks = async () => {
     try {
-        const tasks = await xata.db.Task.sort('xata_createdat', 'desc').getAll();
+        const tasks = await xata.db.Task.select(["*", "assignedToId.*", "projectId.*"]).sort('xata_createdat', 'desc').getAll();
 
         return tasks;
     } catch (error: any) {
@@ -150,13 +150,13 @@ export const fetchTasks = async () => {
  */
 export const fetchTaskByid = async (id: string) => {
     try {
-        const task = await xata.db.Task.filter({ xata_id: id }).getFirst();
+        const task = await xata.db.Task.select(["*", "assignedToId.*", "projectId.*"]).filter({ xata_id: id }).getFirst();
 
         if (!task) {
             return {
                 code: 404,
                 message: 'task not found!',
-                details: 'task with id \`${id}\` not found!'
+                details: `task with id ${id} not found!`
             }
         }
 
@@ -181,7 +181,7 @@ export const fetchTaskByid = async (id: string) => {
  */
 export const fetchTaskByUserId = async (userId: string) => {
     try {
-        const tasks = await xata.db.Task.filter({ assignedToId: userId }).getAll();
+        const tasks = await xata.db.Task.select(["*", "assignedToId.*", "projectId.*"]).filter({ assignedToId: userId }).getAll();
 
         return {
             code: 200,

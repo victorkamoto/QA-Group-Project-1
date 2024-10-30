@@ -80,7 +80,7 @@ export const fetchTeamMemberById = async (id: string) => {
  */
 export const fetchTeamMembersByTeamId = async (teamId: string) => {
     try {
-        const teamMembers = await xata.db.TeamMember.filter({ teamId }).getAll();
+        const teamMembers = await xata.db.TeamMember.select(["*", "teamId.*", "userId.*"]).filter({ teamId }).getAll();
 
         if (teamMembers.length === 0) {
             return {

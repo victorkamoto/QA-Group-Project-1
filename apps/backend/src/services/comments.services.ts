@@ -62,7 +62,7 @@ export const createComment = async (comment: CreateComment) => {
  */
 export const fetchAllComments = async () => {
     try {
-        const comments = xata.db.Comment.getAll();
+        const comments = xata.db.Comment.select(["*", "taskId.*", "userId.*", "taskId.projectId.*"]).getAll();
 
         return comments;
     } catch (error: any) {
@@ -78,7 +78,7 @@ export const fetchAllComments = async () => {
  */
 export const fetchCommentsByTaskId = async (taskId: string) => {
     try {
-        const comments = xata.db.Comment.filter({ taskId }).getAll();
+        const comments = xata.db.Comment.select(["*", "taskId.*", "userId.*", "taskId.projectId.*"]).filter({ taskId }).getAll();
 
         return comments;
     } catch (error: any) {
@@ -96,7 +96,7 @@ export const fetchCommentsByTaskId = async (taskId: string) => {
  */
 export const fetchCommentsByUserId = async (userId: string) => {
     try {
-        const comments = xata.db.Comment.filter({ userId }).getAll();
+        const comments = xata.db.Comment.select(["*", "taskId.*", "userId.*", "taskId.projectId.*"]).filter({ userId }).getAll();
 
         return comments;
     } catch (error: any) {
@@ -116,7 +116,7 @@ export const fetchCommentsByUserId = async (userId: string) => {
  */
 export const fetchCommentById = async (id: string) => {
     try {
-        const comment = xata.db.Comment.filter({ xata_id: id }).getFirst();
+        const comment = xata.db.Comment.select(["*", "taskId.*", "userId.*", "taskId.projectId.*"]).filter({ xata_id: id }).getFirst();
 
         if (!comment) {
             return {

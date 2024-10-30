@@ -75,7 +75,7 @@ export const getTeamMembersByTeamID = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'teamId is required!' });
         }
 
-        const { code, message, details } = await fetchTeamMemberById(teamId);
+        const { code, message, details } = await fetchTeamMembersByTeamId(teamId);
 
         return res.status(code).json({ message, details });
     } catch (error: any) {
