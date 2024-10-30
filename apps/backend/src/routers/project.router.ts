@@ -5,12 +5,14 @@ import {
     create,
     getProjects,
     getProjectById,
+    getProjectsByTeamId,
     update,
     deleteProject
 } from "../controllers/project.controller";
 
 const projectRouter = Router();
 
+projectRouter.get('/search', asyncHandler(getProjectsByTeamId));
 projectRouter.get('/', asyncHandler(getProjects));
 projectRouter.get('/:id', asyncHandler(getProjectById));
 projectRouter.post('/', createProjectSchema, asyncHandler(create));
