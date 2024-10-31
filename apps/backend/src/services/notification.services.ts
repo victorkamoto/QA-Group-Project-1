@@ -38,6 +38,41 @@ export const createNotification = async (message: string, userId: string) => {
 }
 
 /**
+ * Fetches all notifications from the database.
+ *
+ * @returns {Promise<{code: number, message: string, details: any}>} 
+ * An object containing the status code, message, and details of the operation.
+ * - If notifications are found, the status code is 200 and details contain the notifications.
+ * - If no notifications are found, the status code is 404 and details contain a not found message.
+ * - If there is a server error, the status code is 500 and details contain the error message.
+ */
+export const fetchAllNotifications = async () => {
+    try {
+        const notifications = await xata.db.Notification.getAll();
+
+        if (notifications.length === 0) {
+            return {
+                code: 404,
+                message: 'Notifications not found!',
+                details: 'No notifications found!'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Notifications fetched successfully!',
+            details: notifications
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Server error!',
+            details: error.toString()
+        }
+    }
+}
+
+/**
  * Fetches all notifications for a specific user.
  *
  * @param userId - The ID of the user whose notifications are to be fetched.
@@ -70,6 +105,20 @@ export const fetchAllUserNotifications = async (userId: string) => {
     }
 }
 
+/**
+ * Fetches a notification by its ID from the database.
+ *
+ * @param {string} notificationId - The ID of the notification to fetch.
+ * @returns {Promise<{code: number, message: string, details: any}>} - A promise that resolves to an object containing the status code, message, and details of the fetched notification or an error message.
+ *
+ * @example
+ * const result = await fetchNotificationById('12345');
+ * if (result.code === 200) {
+ *     console.log(result.details); // Notification details
+ * } else {
+ *     console.error(result.message); // Error message
+ * }
+ */
 export const fetchNotificationById = async (notificationId: string) => {
     try {
         const notification = await xata.db.Notification.filter({ xata_id: notificationId }).getFirst();

@@ -66,7 +66,7 @@ export const createProject = async (project: NewProject) => {
  */
 export const fetchProjects = async () => {
     try {
-        const projects = await xata.db.Project.getAll();
+        const projects = await xata.db.Project.select(["*", "teamId.*", "teamId.adminId.*"]).getAll();
 
         if (projects.length === 0) {
             return {
@@ -108,7 +108,7 @@ export const fetchProjects = async () => {
  */
 export const fetchProjectById = async (teamId: string) => {
     try {
-        const project = await xata.db.Project.filter({ xata_id: teamId }).getFirst();
+        const project = await xata.db.Project.select(["*", "teamId.*", "teamId.adminId.*"]).filter({ xata_id: teamId }).getFirst();
 
         if (project) {
             return {
@@ -143,7 +143,7 @@ export const fetchProjectById = async (teamId: string) => {
  */
 export const fetchProjectsByTeamId = async (teamId: string) => {
     try {
-        const projects = await xata.db.Project.filter({ teamId }).getAll();
+        const projects = await xata.db.Project.select(["*", "teamId.*"]).filter({ teamId }).getAll();
 
         if (projects.length === 0) {
             return {

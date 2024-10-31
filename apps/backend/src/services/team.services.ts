@@ -79,7 +79,7 @@ export const createTeam = async (team: CreateTeam) => {
  */
 export const fetchTeams = async () => {
     try {
-        const teams = await xata.db.Team.getAll();
+        const teams = await xata.db.Team.select(["*", "adminId.*"]).getAll();
 
         return teams;
     } catch (error: any) {
@@ -96,13 +96,13 @@ export const fetchTeams = async () => {
  */
 export const fetchTeamByid = async (id: string) => {
     try {
-        const team = await xata.db.Team.filter({ xata_id: id }).getFirst();
+        const team = await xata.db.Team.select(["*", "adminId.*"]).filter({ xata_id: id }).getFirst();
 
         if (!team) {
             return {
                 code: 404,
                 message: 'Team not found!',
-                details: 'Team with id \`${id}\` not found!'
+                details: `Team with id ${id} not found!`
             }
         }
 
@@ -336,7 +336,7 @@ export const fetchTeamsByUserId = async (userId: string) => {
 
         const teamIds = teamMembers.map((member) => member.teamId.xata_id);
 
-        const teams = await xata.db.Team.filter({
+        const teams = await xata.db.Team.select(["*", "adminId.*"]).filter({
             xata_id: { $any: teamIds },
         }).getAll();
 
