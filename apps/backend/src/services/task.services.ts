@@ -277,7 +277,7 @@ export const updateTask = async (taskId: string, body: Partial<UpdateTask>) => {
     return {
       code: 200,
       message: "Task updated successfully",
-      details: task,
+      details: { ...task, ...body },
     };
   } catch (error: any) {
     return {
