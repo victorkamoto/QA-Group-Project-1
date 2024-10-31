@@ -28,7 +28,7 @@ export function TabsPortalContent() {
         ))}
       </TabsContent>
       <TabsContent value="kanban">
-        <KanbanBoard />
+        <KanbanBoard tasks={tasks} />
       </TabsContent>
     </div>,
     document.getElementById("tabs-content-portal")!

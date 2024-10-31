@@ -10,39 +10,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { store } from "../../store/store";
 import { toast } from "../ui/use-toast";
+import { Task } from "../../types/task.types";
 
-// Workaround for react-beautiful-dnd in React 18 Strict Mode
-const useStrictDroppable = (enabled: boolean) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const animation = requestAnimationFrame(() => {
-      if (mounted) {
-        setIsEnabled(enabled);
-      }
-    });
-
-    return () => {
-      mounted = false;
-      cancelAnimationFrame(animation);
-    };
-  }, [enabled]);
-
-  return isEnabled;
-};
-
-export default function KanbanBoard() {
-  const tasks = store((state) => state.tasks);
-  const getTasks = store((state) => state.getTasks);
+interface KanbanBoardProps {
+  tasks: Task[];
+}
+export default function KanbanBoard({ tasks }: KanbanBoardProps) {
   const updateTask = store((state) => state.updateTask);
   const kanban = store((state) => state.kanban);
   const setKanban = store((state) => state.setKanban);
-
-  useEffect(() => {
-    getTasks();
-  }, []);
 
   useEffect(() => {
     let columns = [...kanban];
@@ -197,3 +173,25 @@ export default function KanbanBoard() {
     </div>
   );
 }
+
+// Workaround for react-beautiful-dnd in React 18 Strict Mode
+const useStrictDroppable = (enabled: boolean) => {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const animation = requestAnimationFrame(() => {
+      if (mounted) {
+        setIsEnabled(enabled);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      cancelAnimationFrame(animation);
+    };
+  }, [enabled]);
+
+  return isEnabled;
+};
