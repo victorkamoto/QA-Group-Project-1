@@ -224,20 +224,14 @@ export const fetchTaskByUserId = async (userId: string) => {
  * Updates a task with the given taskId and body.
  *
  * @param {string} taskId - The ID of the task to update.
- * @param {Partial<UpdateTask>} body - The data to update the task with.
+ * @param {UpdateTask} body - The data to update the task with.
  * @returns {Promise<{ code: number, message: string, details: any }>} - The result of the update operation.
  *
  * @throws {Error} - Throws an error if the update operation fails.
  */
-export const updateTask = async (taskId: string, body: Partial<UpdateTask>) => {
+export const updateTask = async (taskId: string, body: UpdateTask) => {
   try {
-    const task = await xata.db.Task.select([
-      "*",
-      "assignedToId.*",
-      "projectId.*",
-    ])
-      .filter({ xata_id: taskId })
-      .getFirst();
+    const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
 
     if (!task) {
       return {
@@ -255,9 +249,16 @@ export const updateTask = async (taskId: string, body: Partial<UpdateTask>) => {
       };
     }
 
-    await task.update(body);
+    const result = await xata.db.Task.update(taskId, body);
 
-    const notificationMessage = `'${task.description}' updated!`;
+    if (!result) {
+      return {
+        code: 400,
+        message: "Error updating task!",
+        details: "Task was not updated!",
+      };
+    }
+    const notificationMessage = `'${result.description}' updated!`;
 
     const assignedToId = task.assignedToId.xata_id;
 
@@ -277,7 +278,7 @@ export const updateTask = async (taskId: string, body: Partial<UpdateTask>) => {
     return {
       code: 200,
       message: "Task updated successfully",
-      details: { ...task, ...body },
+      details: result,
     };
   } catch (error: any) {
     return {
@@ -374,13 +375,7 @@ export const updateTaskStatus = async (taskId: string, status: string) => {
       };
     }
 
-    const task = await xata.db.Task.select([
-      "*",
-      "assignedToId.*",
-      "projectId.*",
-    ])
-      .filter({ xata_id: taskId })
-      .getFirst();
+    const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
 
     if (!task) {
       return {
@@ -390,12 +385,12 @@ export const updateTaskStatus = async (taskId: string, status: string) => {
       };
     }
 
-    await task.update({ status });
+    const result = await xata.db.Task.update(taskId, { status });
 
     return {
       code: 200,
       message: "Task status updated successfully",
-      details: task,
+      details: result,
     };
   } catch (error: any) {
     return {
