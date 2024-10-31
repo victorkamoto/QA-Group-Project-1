@@ -171,11 +171,27 @@ export const store = create<StoreState>()(
       return { status };
     },
     updateTask: async (id, task) => {
-      const { status, data } = await updateTask(id, task);
+      let backup: Task[] = [];
+      // optimistic for "snappy" ui
       set((state) => {
+        backup = state.tasks;
         const tasks = state.tasks.filter((t) => t.xata_id != id);
-        return { tasks: [...tasks, data] };
+        let target = state.tasks.find((t) => t.xata_id === id);
+        target = { ...(target as Task), ...task };
+        return { tasks: [...tasks, target] };
       });
+
+      const { status, data } = await updateTask(id, task);
+
+      if (status === 200) {
+        set((state) => {
+          const tasks = state.tasks.filter((t) => t.xata_id != id);
+          return { tasks: [...tasks, data] };
+        });
+      } else {
+        set({ tasks: backup });
+      }
+
       return { status };
     },
     deleteTask: async (id) => {

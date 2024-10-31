@@ -54,7 +54,7 @@ export async function updateTeam(
   team: UpdateTeam
 ): Promise<ApiRes> {
   try {
-    const response = await client.put(`/teams/${id}`, team);
+    const response = await client.patch(`/teams/${id}`, team);
     return {
       status: response.status,
       message: response.data?.message,

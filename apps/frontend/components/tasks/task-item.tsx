@@ -27,17 +27,24 @@ import { Button } from "@/components/ui/button";
 import { store } from "../../store/store";
 import { Project } from "../../types/project.types";
 import { Task } from "../../types/task.types";
+import { toast } from "../ui/use-toast";
+import { Icons } from "../icons";
 
 interface TaskListItemProps {
   task: Task;
 }
 
 export default function TaskItem({
-  task: { description, dueDate, projectId, assignedToId, status },
+  task: { xata_id, description, dueDate, projectId, assignedToId, status },
 }: TaskListItemProps) {
+  const getUser = store((state) => state.getUser);
   const getMembers = store((state) => state.getMembersByTeamId);
+  const updateTask = store((state) => state.updateTask);
+  const deleteTask = store((state) => state.deleteTask);
   const [date, setDate] = useState<Date | undefined>(new Date(dueDate));
   const [members, setMembers] = useState<any>([]);
+
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getMembers(projectId.teamId.xata_id).then((m) => {
@@ -46,13 +53,113 @@ export default function TaskItem({
     });
   }, []);
 
-  const handleDateChange = (newDate: Date | undefined) => {
+  const handleDateChange = async (newDate: Date | undefined) => {
     setDate(newDate);
-    // TODO: update date
+    const str = newDate?.toISOString();
+
+    try {
+      const response = await updateTask(xata_id, {
+        dueDate: str,
+      });
+
+      if (response.status !== 200) {
+        toast({
+          title: "Error",
+          description: "Failed to update task date. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "Task date updated!",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update task date. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleStatusChange = (newStatus: string) => {
-    // TODO: update status
+  const handleStatusChange = async (newStatus: string) => {
+    try {
+      const response = await updateTask(xata_id, {
+        status: newStatus,
+      });
+
+      if (response.status !== 200) {
+        toast({
+          title: "Error",
+          description: "Failed to update task status. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "Task status updated!",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update task status. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleAssigneeChange = async (userId: string) => {
+    try {
+      const { data } = await getUser(userId);
+      const response = await updateTask(xata_id, {
+        assignedToId: data,
+      });
+
+      if (response.status !== 200) {
+        toast({
+          title: "Error",
+          description: "Failed to update task assignee. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "Task assignee updated!",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update task assignee. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      const response = await deleteTask(xata_id);
+
+      setDeleteLoading(false);
+      if (response.status !== 200) {
+        toast({
+          title: "Error",
+          description: "Failed to delete task. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "Task deleted successfully!",
+        });
+      }
+    } catch (error) {
+      setDeleteLoading(false);
+      toast({
+        title: "Error",
+        description: "Failed to delete task. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const statuses = ["in-progress", "completed", "backlog", "review"];
@@ -123,7 +230,7 @@ export default function TaskItem({
                   .map((opt) => {
                     return (
                       <DropdownMenuItem
-                        onClick={() => handleStatusChange("in-progress")}
+                        onClick={() => handleStatusChange(opt)}
                         className="text-center"
                         key={opt}
                       >
@@ -158,32 +265,40 @@ export default function TaskItem({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className="flex-col space-y-1 p-1">
-                  {members
-                    .filter((m: any) => m.xata_id != assignedToId?.xata_id)
-                    .map((m: any) => (
-                      <>
-                        <div className="flex gap-1 justify-center items-center cursor-pointer hover:bg-slate-200 hover:rounded p-1">
-                          <Avatar className="h-8 w-8">
-                            <AvatarFallback>
-                              {m.name
-                                .split(" ")
-                                .map((n: any) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="text-sm">{m.name}</span>
-                        </div>{" "}
-                      </>
-                    ))}
+                  {members.map((m: any) => (
+                    <>
+                      <div
+                        key={m.xata_id}
+                        onClick={() => handleAssigneeChange(m.xata_id)}
+                        className="flex gap-1 justify-center items-center cursor-pointer hover:bg-slate-200 hover:rounded p-1"
+                      >
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback>
+                            {m.name
+                              .split(" ")
+                              .map((n: any) => n[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">{m.name}</span>
+                      </div>{" "}
+                    </>
+                  ))}
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button
+              onClick={handleDelete}
               variant={"ghost"}
               size={"sm"}
               className="hover:bg-red-500 hover:text-white text-red-500"
+              disabled={deleteLoading}
             >
-              <Trash className="w-4 h-4" />
+              {deleteLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Trash className="w-4 h-4" />
+              )}
             </Button>
           </div>
         </div>

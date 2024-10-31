@@ -70,7 +70,7 @@ export async function updateProject(
   project: UpdateProject
 ): Promise<ApiRes> {
   try {
-    const response = await client.put(`/projects/${id}`, project);
+    const response = await client.patch(`/projects/${id}`, project);
     return {
       status: response.status,
       message: response.data?.message,
