@@ -54,7 +54,7 @@ export async function updateTask(
   task: UpdateTask
 ): Promise<ApiRes> {
   try {
-    const response = await client.put(`/tasks/${id}`, task);
+    const response = await client.patch(`/tasks/${id}`, task);
     return {
       status: response.status,
       message: response.data?.message,

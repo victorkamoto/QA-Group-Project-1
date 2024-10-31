@@ -1,10 +1,13 @@
+import { Project } from "./project.types";
+import { User } from "./user.types";
+
 export interface Task {
   xata_id: string;
   description: string;
-  dueDate: Date;
-  status: "in-progress" | "completed" | string;
-  projectId: string;
-  assignedToId: string;
+  dueDate: string;
+  status: "in-progress" | "completed" | "backlog" | "review" | string;
+  projectId: Project;
+  assignedToId: User;
 }
 
 export type CreateTask = Omit<Task, "xata_id">;

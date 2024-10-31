@@ -1,8 +1,10 @@
+import { User } from "./user.types";
+
 export type Team = {
   xata_id: string;
   name: string;
   description: string;
-  adminId: string;
+  adminId: User;
 };
 
 export type CreateTeam = Omit<Team, "xata_id">;
