@@ -159,7 +159,7 @@ export default function TaskItem({
               <DropdownMenuContent align="end">
                 <div className="flex-col space-y-1 p-1">
                   {members
-                    .filter((m: any) => m.xata_id != assignedToId.xata_id)
+                    .filter((m: any) => m.xata_id != assignedToId?.xata_id)
                     .map((m: any) => (
                       <>
                         <div className="flex gap-1 justify-center items-center cursor-pointer hover:bg-slate-200 hover:rounded p-1">

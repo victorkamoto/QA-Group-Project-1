@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { store } from "../../store/store";
 import { toast } from "../ui/use-toast";
 import { Task } from "../../types/task.types";
+import { Badge } from "../ui/badge";
 
 interface KanbanBoardProps {
   tasks: Task[];
@@ -54,7 +55,6 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     });
   }, [tasks]);
 
-  const [newTask, setNewTask] = useState("");
   const strictModeDroppable = useStrictDroppable(true);
 
   const onDragEnd = async (result: DropResult) => {
@@ -124,6 +124,20 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     }
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "in-progress":
+        return "bg-yellow-500";
+      case "completed":
+        return "bg-green-500";
+      case "backlog":
+        return "bg-gray-500";
+      case "review":
+        return "bg-purple-500";
+      default:
+        return "bg-blue-500";
+    }
+  };
   return (
     <div className="p-4">
       <DragDropContext onDragEnd={onDragEnd}>
@@ -131,7 +145,17 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
           {kanban.map((column) => (
             <Card key={column.id}>
               <CardHeader>
-                <CardTitle>{column.title}</CardTitle>
+                <CardTitle>
+                  <div className="flex justify-center items-center">
+                    <Badge
+                      className={`${getStatusColor(
+                        column.id
+                      )} text-white w-[90px] flex justify-center items-center p-1`}
+                    >
+                      {column.title}
+                    </Badge>
+                  </div>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 {strictModeDroppable ? (
