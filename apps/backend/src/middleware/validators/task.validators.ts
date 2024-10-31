@@ -34,6 +34,7 @@ export const createTaskSchema = checkSchema({
         escape: true
     },
     assignedToId: {
+        optional: true,
         isString: {
             errorMessage: 'assignedToId must be a string!'
         },

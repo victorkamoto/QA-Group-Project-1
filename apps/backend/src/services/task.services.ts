@@ -48,14 +48,17 @@ export const createTask = async (task: NewTask) => {
             }
         }
 
-        // check if user to assign to exists
-        const user = xata.db.User.filter({ xata_id: assignedToId }).getFirst();
+        if (assignedToId !== null) {
 
-        if (!user) {
-            return {
-                code: 404,
-                message: 'Error creating Task',
-                details: `User with id ${assignedToId} does not exist!`
+            // check if user to assign to exists
+            const user = xata.db.User.filter({ xata_id: assignedToId }).getFirst();
+
+            if (!user) {
+                return {
+                    code: 404,
+                    message: 'Error creating Task',
+                    details: `User with id ${assignedToId} does not exist!`
+                }
             }
         }
 
@@ -87,17 +90,20 @@ export const createTask = async (task: NewTask) => {
             projectId, assignedToId
         });
 
-        const notificationMessage = `'${result.description}' has been assigned to you!`
 
-        const notificationResult = await createNotification(notificationMessage, assignedToId);
+        // if (assignedToId !== null) {
+        //     const notificationMessage = `'${result.description}' has been assigned to you!`
 
-        if (notificationResult.code !== 201) {
-            return {
-                code: notificationResult.code,
-                message: notificationResult.message,
-                details: notificationResult.details
-            }
-        }
+        //     const notificationResult = await createNotification(notificationMessage, assignedToId);
+
+        //     if (notificationResult.code !== 201) {
+        //         return {
+        //             code: notificationResult.code,
+        //             message: notificationResult.message,
+        //             details: notificationResult.details
+        //         }
+        //     }
+        // }
 
         return {
             code: 201,
@@ -237,16 +243,18 @@ export const updateTask = async (taskId: string, body: UpdateTask) => {
         }
         const notificationMessage = `'${result.description}' updated!`;
 
-        const assignedToId = task.assignedToId.xata_id;
+        if (task.assignedToId !== null) {
+            const assignedToId = task.assignedToId.xata_id;
 
 
-        const notificationResult = await createNotification(notificationMessage, assignedToId);
+            const notificationResult = await createNotification(notificationMessage, assignedToId);
 
-        if (notificationResult.code !== 201) {
-            return {
-                code: notificationResult.code,
-                message: notificationResult.message,
-                details: notificationResult.details
+            if (notificationResult.code !== 201) {
+                return {
+                    code: notificationResult.code,
+                    message: notificationResult.message,
+                    details: notificationResult.details
+                }
             }
         }
 
@@ -303,16 +311,18 @@ export const deleteTaskFromProject = async (taskId: string) => {
 
         const notificationMessage = `'${result.description}' deleted!`;
 
-        const assignedToId = task.assignedToId.xata_id;
+        if (task.assignedToId !== null) {
+            const assignedToId = task.assignedToId.xata_id;
 
 
-        const notificationResult = await createNotification(notificationMessage, assignedToId);
+            const notificationResult = await createNotification(notificationMessage, assignedToId);
 
-        if (notificationResult.code !== 201) {
-            return {
-                code: notificationResult.code,
-                message: notificationResult.message,
-                details: notificationResult.details
+            if (notificationResult.code !== 201) {
+                return {
+                    code: notificationResult.code,
+                    message: notificationResult.message,
+                    details: notificationResult.details
+                }
             }
         }
 
