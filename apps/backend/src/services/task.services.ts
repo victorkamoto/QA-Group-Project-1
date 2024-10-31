@@ -1,6 +1,6 @@
 import { xata } from "../server";
 import { createNotification } from "./notification.services";
-import { NewTask, UpdateTask, isValidStatus } from "../types/task.types";
+import { NewTask, Task, UpdateTask, isValidStatus } from "../types/task.types";
 
 /**
  * Creates a new task in the database.
@@ -274,6 +274,45 @@ export const updateTask = async (taskId: string, body: UpdateTask) => {
         details: notificationResult.details,
       };
     }
+
+    return {
+      code: 200,
+      message: "Task updated successfully",
+      details: result,
+    };
+  } catch (error: any) {
+    return {
+      code: 500,
+      message: "Internal server error",
+      details: error.toString(),
+    };
+  }
+};
+
+/**
+ * Updates a task with the given taskId and body.
+ *
+ * @param {string} taskId - The ID of the task to update.
+ * @param {UpdateTask} body - The data to update the task with.
+ * @returns {Promise<{ code: number, message: string, details: any }>} - The result of the update operation.
+ *
+ * @throws {Error} - Throws an error if the update operation fails.
+ */
+export const patch = async (taskId: string, body: UpdateTask) => {
+  try {
+    const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
+
+    if (!task) {
+      return {
+        code: 400,
+        message: "Error updating task!",
+        details: `Task with id ${taskId} does not exist.`,
+      };
+    }
+
+    await task.update(body);
+
+    const result = await task.read(["*", "assignedToId.*", "projectId.*"]);
 
     return {
       code: 200,
