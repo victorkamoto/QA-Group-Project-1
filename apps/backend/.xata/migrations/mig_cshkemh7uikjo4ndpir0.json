@@ -1,0 +1,22 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cshkemh7uikjo4ndpir0",
+    "operations": [
+      {
+        "alter_column": {
+          "up": "\"assignedToId\"",
+          "down": "\"assignedToId\"",
+          "table": "Task",
+          "column": "assignedToId",
+          "nullable": true
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cshkemh7uikjo4ndpir0",
+  "parent": "mig_csce4emk0a6tb3s70fk0",
+  "schema": "public",
+  "startedAt": "2024-10-31T09:01:15.118018Z"
+}

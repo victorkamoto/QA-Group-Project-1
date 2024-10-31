@@ -298,7 +298,7 @@ const tables = [
         name: "assignedToId",
         type: "link",
         link: { table: "User" },
-        notNull: true,
+        notNull: false,
         unique: false,
         defaultValue: null,
         comment: '{"xata.link":"User"}',
