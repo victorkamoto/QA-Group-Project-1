@@ -4,6 +4,7 @@ import { CreateTeam, Team, UpdateTeam } from "../types/team.types";
 import {
   createTeam,
   deleteTeam,
+  getMembersByTeamId,
   getTeams,
   joinTeam,
   updateTeam,
@@ -12,15 +13,18 @@ import { CreateProject, Project, UpdateProject } from "../types/project.types";
 import {
   createProject,
   deleteProject,
+  getProjectById,
   getProjects,
   updateProject,
 } from "../lib/projects";
 import { Column, CreateTask, Task, UpdateTask } from "../types/task.types";
 import { createTask, deleteTask, getTasks, updateTask } from "../lib/tasks";
+import { getUser } from "../lib/auth";
 
 interface StoreState {
   //   user: User;
   //   setUser: (user: User) => void;
+  getUser: (id: string) => Promise<ApiRes>;
 
   teams: Team[];
   getTeams: () => Promise<void>;
@@ -28,9 +32,11 @@ interface StoreState {
   createTeam: (team: CreateTeam) => Promise<ApiRes>;
   updateTeam: (id: string, team: UpdateTeam) => Promise<ApiRes>;
   deleteTeam: (id: string) => Promise<ApiRes>;
+  getMembersByTeamId: (id: string) => Promise<ApiRes>;
 
   projects: Project[];
   getProjects: () => Promise<void>;
+  getProject: (id: string) => Promise<ApiRes>;
   createProject: (project: CreateProject) => Promise<ApiRes>;
   updateProject: (id: string, team: UpdateProject) => Promise<ApiRes>;
   deleteProject: (id: string) => Promise<ApiRes>;
@@ -46,6 +52,11 @@ interface StoreState {
 }
 
 export const store = create<StoreState>()((set) => ({
+  getUser: async (id) => {
+    const { status, data } = await getUser(id);
+    return { status, data };
+  },
+
   teams: [],
   getTeams: async () => {
     const { data } = await getTeams();
@@ -82,11 +93,20 @@ export const store = create<StoreState>()((set) => ({
     });
     return { status };
   },
+  getMembersByTeamId: async (id) => {
+    // TODO: deduplication
+    const { status, data } = await getMembersByTeamId(id);
+    return { status, data };
+  },
 
   projects: [],
   getProjects: async () => {
     const { data } = await getProjects();
     set({ projects: [...data] });
+  },
+  getProject: async (id) => {
+    const { status, data } = await getProjectById(id);
+    return { status, data };
   },
   createProject: async (project) => {
     const { status, data } = await createProject(project);

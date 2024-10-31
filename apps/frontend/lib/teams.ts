@@ -118,3 +118,19 @@ export async function leaveTeam(
     };
   }
 }
+
+export async function getMembersByTeamId(id: string): Promise<ApiRes> {
+  try {
+    const response = await client.get(`/teammembers/search?teamId=${id}`);
+    return {
+      status: response.status,
+      message: response.data?.message,
+      data: response.data?.details,
+    };
+  } catch (error: any) {
+    return {
+      status: error.status,
+      message: error.response?.data?.message,
+    };
+  }
+}

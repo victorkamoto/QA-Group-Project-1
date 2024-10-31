@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { EmptyPlaceholder } from "../../components/empty-placeholder";
 import { DashboardHeader } from "../../components/header";
@@ -15,13 +15,14 @@ import {
 } from "../../components/ui/tabs";
 import { createPortal } from "react-dom";
 import { TabsPortalContent } from "../../components/dashboard/tabs-content-portal";
+import { store } from "../../store/store";
 
 export default async function DashboardPage() {
   return (
     <DashboardShell>
       <div className="flex items-center justify-between px-2">
         <div className="grid gap-1">
-          <Tabs defaultValue="kanban" className="w-full max-w-4xl mx-auto">
+          <Tabs defaultValue="list" className="w-full max-w-4xl mx-auto">
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger
                 value="list"
