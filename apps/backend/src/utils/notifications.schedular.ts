@@ -48,13 +48,17 @@ const createNotificationOnTasks = async () => {
             if (dateDifference >= 0 && dateDifference <= 2) {
                 const notificationMessage = `${task.description} is almost due`;
 
-                createNotification(notificationMessage, task.assignedToId.toString());
+                if (task.assignedToId !== null) {
+                    createNotification(notificationMessage, task.assignedToId.toString());
+                }
             }
 
             if (dateDifference < 0) {
                 const notificationMessage = `${task.description} set to backlog!`;
 
-                createNotification(notificationMessage, task.assignedToId.toString());
+                if (task.assignedToId !== null) {
+                    createNotification(notificationMessage, task.assignedToId.toString());
+                }
             }
         })
 
