@@ -1,7 +1,9 @@
+import { Team } from "./team.types";
+
 export type Project = {
   xata_id: string;
   name: string;
-  teamId: string;
+  teamId: Team;
 };
 
 export type CreateProject = Omit<Project, "xata_id">;

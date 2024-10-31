@@ -54,7 +54,7 @@ export async function updateTeam(
   team: UpdateTeam
 ): Promise<ApiRes> {
   try {
-    const response = await client.put(`/teams/${id}`, team);
+    const response = await client.patch(`/teams/${id}`, team);
     return {
       status: response.status,
       message: response.data?.message,
@@ -110,6 +110,22 @@ export async function leaveTeam(
     return {
       status: response.status,
       message: response.data?.message,
+    };
+  } catch (error: any) {
+    return {
+      status: error.status,
+      message: error.response?.data?.message,
+    };
+  }
+}
+
+export async function getMembersByTeamId(id: string): Promise<ApiRes> {
+  try {
+    const response = await client.get(`/teammembers/search?teamId=${id}`);
+    return {
+      status: response.status,
+      message: response.data?.message,
+      data: response.data?.details,
     };
   } catch (error: any) {
     return {

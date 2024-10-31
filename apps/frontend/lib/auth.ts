@@ -78,7 +78,19 @@ export const logout = () => {
   localStorage.removeItem("auth");
 };
 
-export const getUser = async (id: string) => {
+export const getUser = async (id: string): Promise<ApiRes> => {
+  try {
+    const response = await client.get(`/users/${id}`);
+    return {
+      status: response.status,
+      message: response.data?.message,
+      data: response.data?.details,
+    };
+  } catch (error: any) {
+    return {
+      status: error.status,
+      message: error.response?.data?.message,
+    };
+  }
   const response = await client.get(`/users/${id}`);
-  return response.data;
 };
