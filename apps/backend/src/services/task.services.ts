@@ -91,23 +91,71 @@ export const createTask = async (task: NewTask) => {
         });
 
 
-        // if (assignedToId !== null) {
-        //     const notificationMessage = `'${result.description}' has been assigned to you!`
-
-        //     const notificationResult = await createNotification(notificationMessage, assignedToId);
-
-        //     if (notificationResult.code !== 201) {
-        //         return {
-        //             code: notificationResult.code,
-        //             message: notificationResult.message,
-        //             details: notificationResult.details
-        //         }
-        //     }
-        // }
+        if (assignedToId !== null) {
+            await assignTaskToUser(result.xata_id, assignedToId);
+        }
 
         return {
             code: 201,
             message: 'Task created successfully',
+            details: result
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}
+
+export const assignTaskToUser = async (taskId: string, userId: string) => {
+    try {
+        const task = await xata.db.Task.filter({ xata_id: taskId }).getFirst();
+
+        if (!task) {
+            return {
+                code: 404,
+                message: 'Error assigning task',
+                details: `Task with id ${taskId} does not exist!`
+            }
+        }
+
+        const user = await xata.db.User.filter({ xata_id: userId }).getFirst();
+
+        if (!user) {
+            return {
+                code: 404,
+                message: 'Error assigning task',
+                details: `User with id ${userId} does not exist!`
+            }
+        }
+
+        const result = await xata.db.Task.update(taskId, { assignedToId: userId });
+
+        if (!result) {
+            return {
+                code: 400,
+                message: 'Error assigning task',
+                details: 'Task was not assigned!'
+            }
+        }
+
+        const notificationMessage = `'${result.description}' has been assigned to you!`;
+
+        const notificationResult = await createNotification(notificationMessage, userId);
+
+        if (notificationResult.code !== 201) {
+            return {
+                code: notificationResult.code,
+                message: notificationResult.message,
+                details: notificationResult.details
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Task assigned successfully',
             details: result
         }
     } catch (error: any) {

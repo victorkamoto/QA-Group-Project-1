@@ -6,6 +6,7 @@ import {
     fetchTasks,
     fetchTaskByid,
     fetchTaskByUserId,
+    assignTaskToUser,
     updateTask,
     deleteTaskFromProject,
     updateTaskStatus
@@ -156,6 +157,27 @@ export const deleteTask = async (req: Request, resp: Response) => {
 export const updateStatus = async (req: Request, resp: Response) => {
     try {
         const { code, message, details } = await updateTaskStatus(req.params.id, req.body.status);
+
+        resp.status(code).json({ message, details });
+    } catch (error: any) {
+        resp.status(500).json({ error: error.toString() });
+    }
+}
+
+
+/**
+ * Assigns a task to a user.
+ *
+ * @param req - The request object containing the taskId and userId in the body.
+ * @param resp - The response object used to send back the HTTP response.
+ *
+ * @returns A promise that resolves to a JSON response with the status code, message, and details.
+ *
+ * @throws Will return a 500 status code and an error message if an error occurs during the assignment process.
+ */
+export const assignToUser = async (req: Request, resp: Response) => {
+    try {
+        const { code, message, details } = await assignTaskToUser(req.body.taskId, req.body.userId);
 
         resp.status(code).json({ message, details });
     } catch (error: any) {
