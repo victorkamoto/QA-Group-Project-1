@@ -181,125 +181,139 @@ export default function TaskItem({
   return (
     <Card className="mb-4 hover:shadow-md cursor-pointer">
       <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex-1 max-w-[40%]">
+        <div className="grid grid-cols-1 lg:grid-cols-8 gap-4 lg:gap-0 items-center">
+          <div className="flex col-span-1 lg:col-span-3">
             <h3 className="font-semibold truncate">{description}</h3>
           </div>
-          <div className="flex items-center space-x-8">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex gap-1 text-sm p-2 h-auto"
-                >
-                  <CalendarClock className="w-4 h-4" />
-                  {date &&
-                    formatDistanceToNow(date, {
-                      addSuffix: true,
-                    })}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateChange}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            <span className="flex gap-1 text-sm cursor-not-allowed">
-              <FolderKanban className="w-4 h-4" /> {projectId.name}
-            </span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="cursor-pointer">
-                  <span className="sr-only">Change status</span>
-                  <Badge
-                    className={`${getStatusColor(
-                      status
-                    )} text-white w-[90px] flex justify-center items-center`}
-                  >
-                    {status}
-                  </Badge>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {...statuses
-                  .filter((s) => s != status)
-                  .map((opt) => {
-                    return (
-                      <DropdownMenuItem
-                        onClick={() => handleStatusChange(opt)}
-                        className="text-center"
-                        key={opt}
+          <div className="col-span-1 lg:col-span-5">
+            <div className="grid grid-cols-4 lg:grid-cols-10 gap-4 lg:gap-0">
+              <div className="flex items-center justify-start lg:justify-center col-span-1 lg:col-span-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="flex gap-1 text-sm p-2 h-auto"
+                    >
+                      <CalendarClock className="w-4 h-4" />
+                      <span className="hidden lg:inline">
+                        {date &&
+                          formatDistanceToNow(date, {
+                            addSuffix: true,
+                          })}
+                      </span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={handleDateChange}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="hidden lg:flex items-center justify-center col-span-3">
+                <span className="flex gap-1 text-sm cursor-not-allowed">
+                  <FolderKanban className="w-4 h-4" /> {projectId.name}
+                </span>
+              </div>
+              <div className="flex items-center justify-center col-span-1 lg:col-span-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="cursor-pointer">
+                      <span className="sr-only">Change status</span>
+                      <Badge
+                        className={`${getStatusColor(
+                          status
+                        )} text-white md:w-[90px] flex justify-center items-center`}
                       >
-                        <Badge
-                          className={`${getStatusColor(
-                            opt
-                          )} text-white w-full flex justify-center items-center`}
-                        >
-                          {opt}
-                        </Badge>
-                      </DropdownMenuItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="cursor-pointer">
-                  {assignedToId ? (
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback>
-                        {assignedToId?.name
-                          .split(" ")
-                          .map((n: any) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <CircleFadingPlus className="text-gray-500 hover:text-black" />
-                  )}
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <div className="flex-col space-y-1 p-1">
-                  {members.map((m: any) => (
-                    <>
-                      <div
-                        key={m.xata_id}
-                        onClick={() => handleAssigneeChange(m.xata_id)}
-                        className="flex gap-1 justify-center items-center cursor-pointer hover:bg-slate-200 hover:rounded p-1"
-                      >
+                        <span className="hidden sm:inline">{status}</span>
+                      </Badge>
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {...statuses
+                      .filter((s) => s != status)
+                      .map((opt) => {
+                        return (
+                          <DropdownMenuItem
+                            onClick={() => handleStatusChange(opt)}
+                            className="text-center"
+                            key={opt}
+                          >
+                            <Badge
+                              className={`${getStatusColor(
+                                opt
+                              )} text-white w-full flex justify-center items-center`}
+                            >
+                              {opt}
+                            </Badge>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="flex items-center justify-center col-span-1">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="cursor-pointer">
+                      {assignedToId ? (
                         <Avatar className="h-8 w-8">
                           <AvatarFallback>
-                            {m.name
+                            {assignedToId?.name
                               .split(" ")
                               .map((n: any) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-sm">{m.name}</span>
-                      </div>{" "}
-                    </>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button
-              onClick={handleDelete}
-              variant={"ghost"}
-              size={"sm"}
-              className="hover:bg-red-500 hover:text-white text-red-500"
-              disabled={deleteLoading}
-            >
-              {deleteLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Trash className="w-4 h-4" />
-              )}
-            </Button>
+                      ) : (
+                        <CircleFadingPlus className="text-gray-500 hover:text-black" />
+                      )}
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <div className="flex-col space-y-1 p-1">
+                      {members.map((m: any) => (
+                        <>
+                          <div
+                            key={m.xata_id}
+                            onClick={() => handleAssigneeChange(m.xata_id)}
+                            className="flex gap-1 justify-center items-center cursor-pointer hover:bg-slate-200 hover:rounded p-1"
+                          >
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback>
+                                {m.name
+                                  .split(" ")
+                                  .map((n: any) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm">{m.name}</span>
+                          </div>{" "}
+                        </>
+                      ))}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="flex items-center justify-center col-span-1">
+                <Button
+                  onClick={handleDelete}
+                  variant={"ghost"}
+                  size={"sm"}
+                  className="hover:bg-red-500 hover:text-white text-red-500"
+                  disabled={deleteLoading}
+                >
+                  {deleteLoading ? (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Trash className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>

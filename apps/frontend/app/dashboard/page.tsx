@@ -21,8 +21,8 @@ export default async function DashboardPage() {
   return (
     <DashboardShell>
       <div className="flex items-center justify-between px-2">
-        <div className="grid gap-1">
-          <Tabs defaultValue="list" className="w-full max-w-4xl mx-auto">
+        <div className="grid">
+          <Tabs defaultValue="list" className="mx-auto">
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger
                 value="list"
