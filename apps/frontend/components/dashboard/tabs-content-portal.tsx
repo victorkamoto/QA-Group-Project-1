@@ -29,8 +29,8 @@ export function TabsPortalContent() {
   if (!mounted) return null;
 
   return createPortal(
-    <div className="w-full max-w-[1200px] mx-auto px-4">
-      <TabsContent value="list" className="space-y-4">
+    <div>
+      <TabsContent value="list">
         {isLoading ? (
           <>
             <TaskItemSkeleton />
