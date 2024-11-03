@@ -48,17 +48,6 @@ export const createTask = async (task: NewTask) => {
             };
         }
 
-        // check if user to assign to exists
-        const user = xata.db.User.filter({ xata_id: assignedToId }).getFirst();
-
-        if (!user) {
-            return {
-                code: 404,
-                message: "Error creating Task",
-                details: `User with id ${assignedToId} does not exist!`,
-            };
-        }
-
         // validate status
         if (!isValidStatus(status)) {
             return {
@@ -89,21 +78,6 @@ export const createTask = async (task: NewTask) => {
             projectId,
             assignedToId,
         });
-
-        const notificationMessage = `'${result.description}' has been assigned to you!`;
-
-        const notificationResult = await createNotification(
-            notificationMessage,
-            assignedToId
-        );
-
-        if (notificationResult.code !== 201) {
-            return {
-                code: notificationResult.code,
-                message: notificationResult.message,
-                details: notificationResult.details,
-            };
-        }
 
         return {
             code: 201,
