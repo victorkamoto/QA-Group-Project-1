@@ -51,7 +51,7 @@ export function SignupForm({ className, ...props }: SignupFormProps) {
       description: "Welcome to our task manager",
     });
 
-    return router.push("/dashboard");
+    return router.push("/login");
   }
 
   return (
