@@ -6,6 +6,7 @@ interface IAuth {
   name?: string;
   email: string;
   password: string;
+  role?: string;
 }
 
 type ILogin = Pick<IAuth, "email" | "password">;
@@ -19,7 +20,7 @@ type Jwt = DecodedJwt | null;
 export const signup = async (data: IAuth): Promise<ApiRes> => {
   try {
     const response = await client.post(
-      "/users/register",
+      "/auth/register",
       {
         ...data,
       },
@@ -42,7 +43,7 @@ export const signup = async (data: IAuth): Promise<ApiRes> => {
 export const login = async (data: ILogin): Promise<ApiRes> => {
   try {
     const response = await client.post(
-      "/users/login",
+      "/auth/login",
       {
         ...data,
       },

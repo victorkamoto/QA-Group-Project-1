@@ -33,12 +33,12 @@ export default async function CoreLayout({ children }: CoreLayoutProps) {
           )}
           {!session && (
             <div className="flex items-center space-x-4">
-              <Link href="/signin">
+              <Link href="/auth/login">
                 <Button variant={"outline"}>
                   <span>Log in</span>
                 </Button>
               </Link>
-              <Link href="/signup">
+              <Link href="/auth/register">
                 <Button variant={"default"}>
                   <span>Sign Up</span>
                 </Button>
