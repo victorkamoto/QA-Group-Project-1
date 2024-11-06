@@ -27,11 +27,17 @@ export function SignupForm({ className, ...props }: SignupFormProps) {
     resolver: zodResolver(userSignupSchema),
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const router = useRouter();
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
-    const { email, name, password } = data;
-    const response = await signup({ email, name, password });
+    const { email, name, password, role } = data;
+    const response = await signup({
+      email,
+      name,
+      password,
+      role: role ? "admin" : undefined,
+    });
     setIsLoading(false);
     if (response?.status !== 201) {
       return toast({
@@ -41,10 +47,11 @@ export function SignupForm({ className, ...props }: SignupFormProps) {
       });
     }
 
-    return toast({
-      title: "Registration Successful",
+    toast({
       description: "Welcome to our task manager",
     });
+
+    return router.push("/login");
   }
 
   return (
@@ -103,6 +110,23 @@ export function SignupForm({ className, ...props }: SignupFormProps) {
             {errors?.password && (
               <p className="px-1 text-xs text-red-600">
                 {errors.password.message}
+              </p>
+            )}
+          </div>
+          <div className="grid gap-1">
+            <div className="flex items-center space-x-2">
+              <Input
+                id="role"
+                type="checkbox"
+                className="h-4 w-4"
+                disabled={isLoading}
+                {...register("role")}
+              />
+              <Label htmlFor="role">Team Lead? (Admin)</Label>
+            </div>
+            {errors?.role && (
+              <p className="px-1 text-xs text-red-600">
+                {errors.role.message?.toString()}
               </p>
             )}
           </div>
