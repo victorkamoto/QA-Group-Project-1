@@ -49,6 +49,22 @@ export async function getTeamById(id: string): Promise<ApiRes> {
   }
 }
 
+export async function getTeamsByUserId(id: string): Promise<ApiRes> {
+  try {
+    const response = await client.get(`/teams/user/${id}`);
+    return {
+      status: response.status,
+      message: response.data?.message,
+      data: response.data?.details,
+    };
+  } catch (error: any) {
+    return {
+      status: error.status,
+      message: error.response?.data?.message,
+    };
+  }
+}
+
 export async function updateTeam(
   id: string,
   team: UpdateTeam

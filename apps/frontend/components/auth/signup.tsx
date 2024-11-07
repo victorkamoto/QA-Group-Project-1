@@ -1,43 +1,45 @@
 "use client";
 
 import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
+import { cn } from "../../lib/utils";
+import { userSignupSchema } from "../../lib/validations/auth";
+import { buttonVariants } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { toast } from "../ui/use-toast";
+import { Icons } from "../icons";
+import { signup } from "@/lib/auth";
 
-import { cn } from "../lib/utils";
-import { userLoginSchema } from "../lib/validations/auth";
-import { buttonVariants } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Icons } from "./icons";
-import { login } from "@/lib/auth";
-import { toast } from "./ui/use-toast";
-import { useRouter } from "next/navigation";
+type SignupFormProps = React.HTMLAttributes<HTMLDivElement>;
 
-type LoginFormProps = React.HTMLAttributes<HTMLDivElement>;
+type FormData = z.infer<typeof userSignupSchema>;
 
-type FormData = z.infer<typeof userLoginSchema>;
-
-export function LoginForm({ className, ...props }: LoginFormProps) {
+export function SignupForm({ className, ...props }: SignupFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(userLoginSchema),
+    resolver: zodResolver(userSignupSchema),
   });
-  const router = useRouter();
-
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const router = useRouter();
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
-    const { email, password } = data;
-    const response = await login({ email, password });
+    const { email, name, password, role } = data;
+    const response = await signup({
+      email,
+      name,
+      password,
+      role: role ? "admin" : undefined,
+    });
     setIsLoading(false);
-
-    if (response?.status !== 200) {
+    if (response?.status !== 201) {
       return toast({
         title: "Something went wrong.",
         description: response.message,
@@ -46,16 +48,33 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
     }
 
     toast({
-      description: "Welcome back!",
+      description: "Welcome to our task manager",
     });
 
-    return router.push("/dashboard");
+    router.push("/login");
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="grid gap-2">
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="fullName">
+              Full Name
+            </Label>
+            <Input
+              id="fullName"
+              placeholder="John Doe"
+              type="text"
+              autoCapitalize="words"
+              autoCorrect="off"
+              disabled={isLoading}
+              {...register("name")}
+            />
+            {errors?.name && (
+              <p className="px-1 text-xs text-red-600">{errors.name.message}</p>
+            )}
+          </div>
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
@@ -65,7 +84,6 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               placeholder="name@example.com"
               type="email"
               autoCapitalize="none"
-              autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
               {...register("email")}
@@ -95,11 +113,28 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               </p>
             )}
           </div>
+          <div className="grid gap-1">
+            <div className="flex items-center space-x-2">
+              <Input
+                id="role"
+                type="checkbox"
+                className="h-4 w-4"
+                disabled={isLoading}
+                {...register("role")}
+              />
+              <Label htmlFor="role">Team Lead? (Admin)</Label>
+            </div>
+            {errors?.role && (
+              <p className="px-1 text-xs text-red-600">
+                {errors.role.message?.toString()}
+              </p>
+            )}
+          </div>
           <button className={cn(buttonVariants())} disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In
+            Sign Up
           </button>
         </div>
       </form>

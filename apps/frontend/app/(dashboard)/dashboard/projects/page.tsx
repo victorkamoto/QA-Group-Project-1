@@ -2,15 +2,15 @@
 
 import { redirect } from "next/navigation";
 
-import { DashboardHeader } from "../../../components/header";
-import { DashboardShell } from "../../../components/shell";
-import { UserNameForm } from "../../../components/user-name-form";
-import { EmptyPlaceholder } from "../../../components/empty-placeholder";
+import { DashboardHeader } from "../../../../components/header";
+import { DashboardShell } from "../../../../components/shell";
+import { UserNameForm } from "../../../../components/user-name-form";
+import { EmptyPlaceholder } from "../../../../components/empty-placeholder";
 import React, { useEffect, useState } from "react";
-import { ProjectDialog } from "../../../components/projects/create-project";
-import { store } from "../../../store/store";
-import ProjectItem from "../../../components/projects/project-item";
-import ProjectItemDialog from "../../../components/projects/project-item.dialog";
+import { ProjectDialog } from "../../../../components/projects/create-project";
+import { store } from "../../../../store/store";
+import ProjectItem from "../../../../components/projects/project-item";
+import ProjectItemDialog from "../../../../components/projects/project-item.dialog";
 
 export default async function ProjectsPage() {
   const projects = store((state) => state.projects);

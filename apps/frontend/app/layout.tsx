@@ -5,6 +5,7 @@ import { ThemeProvider } from "../components/theme-provider";
 import { Toaster } from "../components/ui/toaster";
 import { Analytics } from "../components/analytics";
 import { TailwindIndicator } from "../components/tailwind-indicator";
+import { AuthProvider } from "../components/auth/auth-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <AuthProvider>{children}</AuthProvider>
           <Toaster />
           <Analytics />
           <TailwindIndicator />
