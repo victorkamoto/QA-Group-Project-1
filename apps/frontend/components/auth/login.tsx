@@ -5,17 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
-import { cn } from "../lib/utils";
-import { userLoginSchema } from "../lib/validations/auth";
-import { buttonVariants } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Icons } from "./icons";
+import { cn } from "../../lib/utils";
+import { userLoginSchema } from "../../lib/validations/auth";
+import { buttonVariants } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Icons } from "../icons";
 import { login } from "@/lib/auth";
-import { toast } from "./ui/use-toast";
-
-// TODO: signIn func
-const signIn = () => {};
+import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type LoginFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -29,6 +27,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userLoginSchema),
   });
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -46,10 +45,11 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
       });
     }
 
-    return toast({
-      title: "Login Successful",
+    toast({
       description: "Welcome back!",
     });
+
+    router.push("/dashboard");
   }
 
   return (

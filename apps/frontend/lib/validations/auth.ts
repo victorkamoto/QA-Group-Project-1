@@ -28,6 +28,7 @@ export const userSignupSchema = z.object({
     },
     {
       message: "Input should be two names, e.g John Doe",
-    },
+    }
   ),
+  role: z.any(),
 });

@@ -9,7 +9,7 @@ export type ApiRes = {
 export type User = {
   name: string;
   email: string;
-  avatar: string;
+  role: string;
 };
 export type NavItem = {
   title: string;

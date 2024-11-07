@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { cn } from "../../../lib/utils";
-import { buttonVariants } from "../../../components/ui/button";
-import { SignupForm } from "../../../components/signup";
+import { cn } from "../../../../lib/utils";
+import { buttonVariants } from "../../../../components/ui/button";
+import { SignupForm } from "../../../../components/auth/signup";
 import Image from "next/image";
 import { Icons } from "@/components/icons";
 
@@ -18,7 +18,7 @@ export default function RegisterPage() {
         href="/"
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "absolute left-4 top-4 md:left-8 md:top-8",
+          "absolute left-4 top-4 md:left-8 md:top-8"
         )}
       >
         <>
@@ -27,17 +27,17 @@ export default function RegisterPage() {
         </>
       </Link>
       <Link
-        href="/signin"
+        href="/auth/login"
         className={cn(
           buttonVariants({ variant: "default" }),
-          "absolute right-4 top-4 md:right-8 md:top-8",
+          "absolute right-4 top-4 md:right-8 md:top-8"
         )}
       >
         Login
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center items-center justify-center">
-          <Image src={"logo.svg"} alt="logo" width={100} height={100} />
+          <Image src={"../logo.svg"} alt="logo" width={75} height={75} />
           <h1 className="text-2xl font-semibold tracking-tight">
             Create an account
           </h1>

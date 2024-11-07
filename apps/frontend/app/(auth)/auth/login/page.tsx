@@ -1,10 +1,10 @@
 import { type Metadata } from "next";
 import Link from "next/link";
 
-import { cn } from "../../../lib/utils";
-import { buttonVariants } from "../../../components/ui/button";
-import { Icons } from "../../../components/icons";
-import { LoginForm } from "../../../components/login";
+import { cn } from "../../../../lib/utils";
+import { buttonVariants } from "../../../../components/ui/button";
+import { Icons } from "../../../../components/icons";
+import { LoginForm } from "../../../../components/auth/login";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function LoginPage() {
         href="/"
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "absolute left-4 top-4 md:left-8 md:top-8",
+          "absolute left-4 top-4 md:left-8 md:top-8"
         )}
       >
         <>
@@ -29,7 +29,7 @@ export default function LoginPage() {
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center items-center justify-center">
-          <Image src={"logo.svg"} alt="logo" width={100} height={100} />
+          <Image src={"../logo.svg"} alt="logo" width={75} height={75} />
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome back
           </h1>
@@ -40,7 +40,7 @@ export default function LoginPage() {
         <LoginForm />
         <p className="px-8 text-center text-sm text-muted-foreground">
           <Link
-            href="/signup"
+            href="/auth/register"
             className="hover:text-brand underline underline-offset-4"
           >
             Don&apos;t have an account? Sign Up

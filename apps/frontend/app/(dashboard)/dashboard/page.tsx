@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+"use client";
 
-import { EmptyPlaceholder } from "../../components/empty-placeholder";
-import { DashboardHeader } from "../../components/header";
-import { DashboardShell } from "../../components/shell";
-import KanbanBoard from "../../components/dashboard/kanban";
-import { Button } from "../../components/ui/button";
+import React, { createContext, useEffect } from "react";
+
+import { EmptyPlaceholder } from "../../../components/empty-placeholder";
+import { DashboardHeader } from "../../../components/header";
+import { DashboardShell } from "../../../components/shell";
+import KanbanBoard from "../../../components/dashboard/kanban";
+import { Button } from "../../../components/ui/button";
 import { Columns } from "lucide-react";
 import { ListChecks } from "lucide-react";
 import {
@@ -12,10 +14,11 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/ui/tabs";
+} from "../../../components/ui/tabs";
 import { createPortal } from "react-dom";
-import { TabsPortalContent } from "../../components/dashboard/tabs-content-portal";
-import { store } from "../../store/store";
+import { TabsPortalContent } from "../../../components/dashboard/tabs-content-portal";
+import { store } from "../../../store/store";
+import { TaskDialog } from "../../../components/tasks/create-task";
 
 export default async function DashboardPage() {
   return (
@@ -42,7 +45,7 @@ export default async function DashboardPage() {
             <TabsPortalContent />
           </Tabs>
         </div>
-        <Button>Create Task</Button>
+        <TaskDialog buttonText="Create Task" />
       </div>
       <div id="tabs-content-portal"></div>
     </DashboardShell>

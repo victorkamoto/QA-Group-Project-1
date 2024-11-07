@@ -13,22 +13,24 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { UserAvatar } from "./user-avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: Pick<User, "name" | "avatar" | "email">;
+  user: Pick<User, "name" | "email">;
 }
 
 export function UserAccountNav({ user }: UserAccountNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <UserAvatar
-          user={{
-            name: user.name ?? null,
-            avatar: user.avatar ?? null,
-          }}
-          className="h-8 w-8"
-        />
+        <Avatar className="h-8 w-8">
+          <AvatarFallback>
+            {user?.name
+              .split(" ")
+              .map((n: any) => n[0])
+              .join("")}
+          </AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <div className="flex items-center justify-start gap-2 p-2">
