@@ -60,7 +60,7 @@ export const login = async (data: ILogin): Promise<ApiRes> => {
 
     const user = await getUser(decoded?.userId);
 
-    localStorage.setItem("auth", JSON.stringify(user));
+    localStorage.setItem("auth", JSON.stringify(user.data));
 
     return {
       status: response.status,

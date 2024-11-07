@@ -2,16 +2,16 @@
 
 import { redirect } from "next/navigation";
 
-import { DashboardHeader } from "../../../components/header";
-import { DashboardShell } from "../../../components/shell";
-import { UserNameForm } from "../../../components/user-name-form";
-import { EmptyPlaceholder } from "../../../components/empty-placeholder";
+import { DashboardHeader } from "../../../../components/header";
+import { DashboardShell } from "../../../../components/shell";
+import { UserNameForm } from "../../../../components/user-name-form";
+import { EmptyPlaceholder } from "../../../../components/empty-placeholder";
 import React, { useEffect, useState } from "react";
-import { Button } from "../../../components/ui/button";
-import { TeamDialog } from "../../../components/teams/create-join-team";
-import TeamItem from "../../../components/teams/team-item";
-import { store } from "../../../store/store";
-import TeamItemDialog from "../../../components/teams/team-item.dialog";
+import { Button } from "../../../../components/ui/button";
+import { TeamDialog } from "../../../../components/teams/create-join-team";
+import TeamItem from "../../../../components/teams/team-item";
+import { store } from "../../../../store/store";
+import TeamItemDialog from "../../../../components/teams/team-item.dialog";
 
 export default async function TeamsPage() {
   const teams = store((state) => state.teams);

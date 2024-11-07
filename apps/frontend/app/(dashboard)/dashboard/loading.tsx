@@ -1,6 +1,6 @@
 import React from "react";
-import { DashboardHeader } from "../../components/header";
-import { DashboardShell } from "../../components/shell";
+import { DashboardHeader } from "../../../components/header";
+import { DashboardShell } from "../../../components/shell";
 
 export default function DashboardLoading() {
   return (

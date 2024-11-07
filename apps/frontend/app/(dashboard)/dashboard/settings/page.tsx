@@ -2,10 +2,10 @@
 
 import { redirect } from "next/navigation";
 
-import { DashboardHeader } from "../../../components/header";
-import { DashboardShell } from "../../../components/shell";
-import { UserNameForm } from "../../../components/user-name-form";
-import { EmptyPlaceholder } from "../../../components/empty-placeholder";
+import { DashboardHeader } from "../../../../components/header";
+import { DashboardShell } from "../../../../components/shell";
+import { UserNameForm } from "../../../../components/user-name-form";
+import { EmptyPlaceholder } from "../../../../components/empty-placeholder";
 import React from "react";
 
 export default async function SettingsPage() {

@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 
-import { dashboardConfig } from "../../config/dashboard";
-import { MainNav } from "../../components/main-nav";
-import { DashboardNav } from "../../components/nav";
-import { DashFooter } from "../../components/dash-footer";
-import { UserAccountNav } from "../../components/user-account-nav";
+import { dashboardConfig } from "../../../config/dashboard";
+import { MainNav } from "../../../components/main-nav";
+import { DashboardNav } from "../../../components/nav";
+import { DashFooter } from "../../../components/dash-footer";
+import { UserAccountNav } from "../../../components/user-account-nav";
 import React from "react";
 
 interface DashboardLayoutProps {
