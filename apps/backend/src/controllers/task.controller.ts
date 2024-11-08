@@ -9,6 +9,7 @@ import {
   updateTask,
   deleteTaskFromProject,
   updateTaskStatus,
+  fetchTaskByProjectId,
   patch,
 } from "../services/task.services";
 
@@ -52,6 +53,11 @@ export const create = async (req: Request, resp: Response) => {
  */
 export const getTasks = async (req: Request, resp: Response) => {
   try {
+    if (req.query.projectId) {
+      const tasks = await fetchTaskByProjectId(req.query.projectId as string);
+      
+      return resp.json(tasks);
+    }
     const tasks = await fetchTasks();
 
     resp.json(tasks);

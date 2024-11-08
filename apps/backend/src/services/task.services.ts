@@ -118,6 +118,47 @@ export const fetchTasks = async () => {
 };
 
 /**
+ * Fetches tasks associated with a specific project ID.
+ *
+ * @param {string} projectId - The ID of the project to fetch tasks for.
+ * @returns {Promise<{ code: number, message: string, details: any }>} 
+ * An object containing the status code, message, and details of the fetched tasks or error.
+ *
+ * @throws {Error} If there is an issue with fetching the tasks, an error object is returned with a status code of 500.
+ */
+export const fetchTaskByProjectId = async (projectId: string) => {
+    try {
+        const tasks = await xata.db.Task.select([
+            "*",
+            "assignedToId.*",
+            "projectId.*",
+        ])
+            .filter({ projectId })
+            .getAll();
+
+        if (tasks.length === 0) {
+            return {
+                code: 404,
+                message: "Tasks not found!",
+                details: `No tasks found for project with id ${projectId}!`,
+            };
+        }
+
+        return {
+            code: 200,
+            message: "Tasks found!",
+            details: tasks,
+        };
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: "Internal server error",
+            details: error.toString(),
+        };
+    }
+}
+
+/**
  * Fetches a task by its ID from the database.
  *
  * @param {string} id - The ID of the task to fetch.
