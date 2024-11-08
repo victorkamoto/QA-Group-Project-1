@@ -6,8 +6,8 @@ export interface Task {
   description: string;
   dueDate: string;
   status: "in-progress" | "completed" | "backlog" | "review" | string;
-  projectId: Project;
-  assignedToId: User;
+  projectId: Project | Partial<Project>;
+  assignedToId?: User | Partial<User>;
 }
 
 export type CreateTask = Omit<Task, "xata_id">;

@@ -9,21 +9,15 @@ import { Task } from "../../types/task.types";
 import { store } from "../../store/store";
 import { TaskItemSkeleton } from "../tasks/task-item-skeleton";
 
-export function TabsPortalContent() {
+interface KanbanBoardProps {
+  tasks: Task[];
+}
+
+export function TabsPortalContent({ tasks }: KanbanBoardProps) {
   const [mounted, setMounted] = useState(false);
-  const tasks = store((state) => state.tasks);
-  const getTasks = store((state) => state.getTasks);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setMounted(true);
-
-    const fetchTasks = async () => {
-      await getTasks();
-      setIsLoading(false);
-    };
-
-    fetchTasks();
   }, []);
 
   if (!mounted) return null;
@@ -31,7 +25,7 @@ export function TabsPortalContent() {
   return createPortal(
     <div>
       <TabsContent value="list">
-        {isLoading ? (
+        {!tasks ? (
           <>
             <TaskItemSkeleton />
             <TaskItemSkeleton />

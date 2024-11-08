@@ -49,9 +49,9 @@ export async function getProjectById(id: string): Promise<ApiRes> {
   }
 }
 
-export async function getProjectByTeamId(id: string): Promise<ApiRes> {
+export async function getProjectsByTeamId(id: string): Promise<ApiRes> {
   try {
-    const response = await client.get(`/projects/?teamId=${id}`);
+    const response = await client.get(`/projects/search?teamId=${id}`);
     return {
       status: response.status,
       message: response.data?.message,

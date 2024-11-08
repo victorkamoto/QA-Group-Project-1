@@ -41,13 +41,22 @@ export default function TaskItem({
   const getMembers = store((state) => state.getMembersByTeamId);
   const updateTask = store((state) => state.updateTask);
   const deleteTask = store((state) => state.deleteTask);
+  const projects = store((state) => state.projects);
   const [date, setDate] = useState<Date | undefined>(new Date(dueDate));
   const [members, setMembers] = useState<any>([]);
 
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    getMembers(projectId.teamId.xata_id).then((m) => {
+    let proj = projectId;
+    if (!proj.teamId) {
+      const project = projects.find((p) => p.xata_id === proj.xata_id);
+      if (project?.teamId) {
+        proj.teamId = project.teamId;
+      }
+    }
+    const id: any = proj.teamId?.xata_id;
+    getMembers(id as string).then((m) => {
       let entries = m.data.map((each: any) => each.userId);
       setMembers(entries);
     });
@@ -259,7 +268,7 @@ export default function TaskItem({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <div className="cursor-pointer">
-                      {assignedToId ? (
+                      {assignedToId?.name ? (
                         <Avatar className="h-8 w-8">
                           <AvatarFallback>
                             {assignedToId?.name

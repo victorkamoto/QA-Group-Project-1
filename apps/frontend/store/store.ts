@@ -6,6 +6,7 @@ import {
   deleteTeam,
   getMembersByTeamId,
   getTeams,
+  getTeamsByUserId,
   joinTeam,
   updateTeam,
 } from "../lib/teams";
@@ -15,10 +16,17 @@ import {
   deleteProject,
   getProjectById,
   getProjects,
+  getProjectsByTeamId,
   updateProject,
 } from "../lib/projects";
 import { Column, CreateTask, Task, UpdateTask } from "../types/task.types";
-import { createTask, deleteTask, getTasks, updateTask } from "../lib/tasks";
+import {
+  createTask,
+  deleteTask,
+  getTasks,
+  getTasksByProjectId,
+  updateTask,
+} from "../lib/tasks";
 import { getUser } from "../lib/auth";
 import { devtools } from "zustand/middleware";
 
@@ -29,6 +37,7 @@ interface StoreState {
 
   teams: Team[];
   getTeams: () => Promise<void>;
+  getTeamsByUserId: (id: string) => Promise<ApiRes>;
   joinTeam: (teamId: string, userId: string) => Promise<ApiRes>;
   createTeam: (team: CreateTeam) => Promise<ApiRes>;
   updateTeam: (id: string, team: UpdateTeam) => Promise<ApiRes>;
@@ -37,6 +46,7 @@ interface StoreState {
 
   projects: Project[];
   getProjects: () => Promise<void>;
+  getProjectsByTeamId: (id: string) => Promise<ApiRes>;
   getProject: (id: string) => Promise<ApiRes>;
   createProject: (project: CreateProject) => Promise<ApiRes>;
   updateProject: (id: string, team: UpdateProject) => Promise<ApiRes>;
@@ -44,6 +54,7 @@ interface StoreState {
 
   tasks: Task[];
   getTasks: () => Promise<void>;
+  getTasksByProjectId: (id: string) => Promise<ApiRes>;
   createTask: (task: CreateTask) => Promise<ApiRes>;
   updateTask: (id: string, task: UpdateTask) => Promise<ApiRes>;
   deleteTask: (id: string) => Promise<ApiRes>;
@@ -63,6 +74,11 @@ export const store = create<StoreState>()(
     getTeams: async () => {
       const { data } = await getTeams();
       set({ teams: [...data] });
+    },
+    getTeamsByUserId: async (id) => {
+      const { data, status } = await getTeamsByUserId(id);
+      set({ teams: data });
+      return { data, status };
     },
     joinTeam: async (teamId, userId) => {
       const { status, data } = await joinTeam(teamId, userId);
@@ -105,6 +121,10 @@ export const store = create<StoreState>()(
     getProjects: async () => {
       const { data } = await getProjects();
       set({ projects: [...data] });
+    },
+    getProjectsByTeamId: async (id) => {
+      const { data, status } = await getProjectsByTeamId(id);
+      return { data, status };
     },
     getProject: async (id) => {
       const { status, data } = await getProjectById(id);
@@ -163,11 +183,18 @@ export const store = create<StoreState>()(
       const { data } = await getTasks();
       set({ tasks: [...data] });
     },
+    getTasksByProjectId: async (id) => {
+      const { data, status } = await getTasksByProjectId(id);
+      return { data, status };
+    },
     createTask: async (task) => {
-      const { status, data } = await createTask(task);
+      let entry = { ...task, projectId: task.projectId?.xata_id };
+      const { status, data } = await createTask(entry);
+
       set((state) => {
         return { tasks: [...state.tasks, data] };
       });
+
       return { status };
     },
     updateTask: async (id, task) => {

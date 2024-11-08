@@ -17,6 +17,7 @@ import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
 import { Icons } from "../icons";
 import { store } from "../../store/store";
+import { useAuth } from "../auth/auth-provider";
 
 const createTeamSchema = z.object({
   name: z.string().min(2, {
@@ -41,6 +42,7 @@ interface TeamDialogProps {
 }
 
 export function TeamDialog({ type, buttonText }: TeamDialogProps) {
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const createTeam = store((state) => state.createTeam);
   const joinTeam = store((state) => state.joinTeam);
@@ -76,9 +78,8 @@ export function TeamDialog({ type, buttonText }: TeamDialogProps) {
       });
     } else {
       const { teamId } = data as z.infer<typeof joinTeamSchema>;
-      const userId = JSON.parse(localStorage.getItem("auth") || "").userId;
 
-      const response = await joinTeam(teamId, userId);
+      const response = await joinTeam(teamId, user?.xata_id as string);
       setIsLoading(false);
       if (response?.status !== 200) {
         return toast({
